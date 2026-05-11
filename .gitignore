@@ -1,0 +1,15 @@
+# Reference book (not for distribution)
+tdd-buildautomation-ci.pdf
+
+# Markdown notes & AI assistant files — keep README only
+*.md
+!README.md
+
+# Eclipse build output
+bin/
+
+# OS
+.DS_Store
+
+# IDE local
+.settings/
