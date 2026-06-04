@@ -13,8 +13,13 @@ public class UserDao {
 
 	public void save(User user) {
 		em.getTransaction().begin();
-		em.persist(user);
-		em.getTransaction().commit();
+		try {
+			em.persist(user);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			em.getTransaction().rollback();
+			throw e;
+		}
 	}
 
 	public User findById(int id) {

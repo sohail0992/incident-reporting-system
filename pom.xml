@@ -118,45 +118,8 @@
 				</executions>
 			</plugin>
 
-			<!-- Exec Maven Plugin (auto-start/stop Docker Compose) -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<!-- Start Docker Compose before integration tests -->
-					<execution>
-						<id>docker-compose-up</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>docker-compose</executable>
-							<arguments>
-								<argument>up</argument>
-								<argument>-d</argument>
-							</arguments>
-							<workingDirectory>${project.basedir}</workingDirectory>
-						</configuration>
-					</execution>
-					<!-- Stop Docker Compose after integration tests -->
-					<execution>
-						<id>docker-compose-down</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>docker-compose</executable>
-							<arguments>
-								<argument>down</argument>
-							</arguments>
-							<workingDirectory>${project.basedir}</workingDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- Testcontainers handles Docker lifecycle automatically in IT tests.
+			     No exec-maven-plugin needed: Docker starts/stops per test class. -->
 		</plugins>
 	</build>
 </project>
