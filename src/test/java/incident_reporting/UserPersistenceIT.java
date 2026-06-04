@@ -32,10 +32,10 @@ public class UserPersistenceIT {
 
 	@BeforeClass
 	public static void setupDatabase() {
-		container = new PostgreSQLContainer<>("postgres:15")
-			.withDatabaseName("incident_db")
-			.withUsername("incident_user")
-			.withPassword("incident_password");
+		container = new PostgreSQLContainer<>("postgres:15");
+		container.withDatabaseName("incident_db");
+		container.withUsername("incident_user");
+		container.withPassword("incident_password");
 		container.start();
 
 		Map<String, String> properties = new HashMap<>();
