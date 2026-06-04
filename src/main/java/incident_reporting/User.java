@@ -1,15 +1,34 @@
 package incident_reporting;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="users")
 public class User {
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
+	
+    @Column(length=50, nullable=false, unique=false)
 	private String firstName;
+    
+    @Column(length=50, nullable=false, unique=false)
 	private String lastName;
-	private String Email;
-	private String Password;
-	private static int lastId = 0;
+    
+
+    @Column(nullable=false, unique=true, length=255)
+    private String email;
+    
+    @Column(nullable=false, unique=false, length=255)
+	private String password;
+    
 
 	public User() {
-		this.id = ++lastId;
 	}
 
 	public int getId() {
@@ -24,7 +43,7 @@ public class User {
 		return this.firstName;
 	}
 
-	public void setFirstName(String firstName) throws Exception {
+	public void setFirstName(String firstName) {
 		validateNameString(firstName);
 		this.firstName = firstName;
 	}
@@ -39,21 +58,21 @@ public class User {
 	}
 
 	public String getEmail() {
-		return this.Email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
 		validateEmailString(email);
-		Email = email;
+		this.email = email;
 	}
 
 	public String getPassword() {
-		return this.Password;
+		return this.password;
 	}
 
 	public void setPassword(String password) {
 		validatePasswordString(password);
-		this.Password = password;
+		this.password = password;
 	}
 
 	// helper methods can be moved to a separate utility class if needed in future

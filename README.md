@@ -1,74 +1,40 @@
-# Incident Reporting System (IS)
+# Incident Reporting System
 
-[![Java](https://img.shields.io/badge/Java-17-blue)](https://www.oracle.com/java/)
+An AST (Automated Software Testing) project built with TDD, Maven, Docker, and JPA/Hibernate.
 
-> A clean Maven-based Java 17 project with CLI, JavaFX GUI, E2E and BDD tests using JUnit 5, Cucumber, and PostgreSQL — wired with Google Guice and built for CI with GitHub Actions and PIT mutation testing.
+## Tech Stack
 
----
+- Java 8
+- JUnit 4 + AssertJ
+- Hibernate 5 / JPA (PostgreSQL)
+- Testcontainers (integration tests with Docker)
+- Maven
+- Docker
 
-## 📌 Features
+## Build & Run
 
-- SQL backend with PostgreSQL + Hibernate (JPA)
-- Configurable at runtime using Google Guice
-- Command-Line Interface (CLI) and JavaFX GUI
-- BDD testing with Cucumber (Gherkin)
-- GitHub Actions CI/CD pipeline
-- Clean modular structure inspired by [Bettini’s TDD Book]([https://github.com/LorenzoBettini/tddbook-code](https://github.com/LorenzoBettini/tdd-buildautomation-ci-book-examples))
----
-
-## 📋 Requirements
-
-| Tool            |
-|-----------------|
-| Java 17         |
-| Maven           |
-| PostgreSQL      |
-| Hibernate (JPA) |
-| Guice           |
-| JavaFX          |
-| JUnit 5         |
-| Cucumber        |
-| PIT             |
-| Git + GitHub    |
-| Docker          |
-
----
-
-## 🏁 Getting Started
+Requirements: Java 8, Maven, Docker
 
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/incident-reporting-system.git
-cd incident-reporting-system
+# Unit tests only (no Docker needed — uses H2 in-memory)
+mvn clean test
 
-# Build and test
-mvn clean install
-
-# Run app (CLI or GUI based on entry)
-mvn exec:java
-````
-
----
-
-## 🧪 Testing
-
-```bash
-# Unit + integration tests
-mvn test
-
-# BDD (Cucumber)
-mvn verify
-
-# Mutation testing
-mvn org.pitest:pitest-maven:mutationCoverage
+# Unit + integration tests (Docker starts automatically via Testcontainers)
+mvn clean verify
 ```
 
----
+## Project Structure
 
-## 🚀 CI/CD
+```
+src/main/java/incident_reporting/   application code
+src/test/java/incident_reporting/   unit and integration tests
+src/main/resources/META-INF/        JPA persistence config (PostgreSQL)
+src/test/resources/META-INF/        JPA persistence config (H2 for unit tests)
+docker-compose.yml                  local PostgreSQL for manual development
+```
 
-* **GitHub Actions** runs on every push
-* **SonarCloud** handles code quality + test coverage
-* **Docker** used for PostgreSQL container if needed in CI
+## Entities
 
----
+- **User** — reports incidents (firstName, lastName, email, password)
+- **Incident** — reported event with title, description, severity, timestamp, isClosed
+- **Tag** — many-to-many with Incident
