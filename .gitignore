@@ -16,3 +16,7 @@ bin/
 
 # IDE local
 .settings/
+
+# Environment variables and credentials (contains secrets)
+.env
+CREDENTIALS.txt
