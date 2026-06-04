@@ -3,6 +3,9 @@
 *.md
 !README.md
 
+# Local working instructions (contains AI-related notes)
+instructions.txt
+
 # Eclipse build output
 bin/
 

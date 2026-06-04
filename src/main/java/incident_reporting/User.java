@@ -1,4 +1,4 @@
-package incident_reporting_system;
+package incident_reporting;
 
 public class User {
 	private int id;
@@ -7,7 +7,7 @@ public class User {
 	private String Email;
 	private String Password;
 	private static int lastId = 0;
-	
+
 	public User() {
 		this.id = ++lastId;
 	}
@@ -55,17 +55,16 @@ public class User {
 		validatePasswordString(password);
 		this.Password = password;
 	}
-	
-	
+
 	// helper methods can be moved to a separate utility class if needed in future
 	/**
-	 * DRY (don't repeat principle) we will use same function to validate both first and last name since they have same validation rules.
-     * Helper method to validate name strings.
-     * Throws IllegalArgumentException if validation fails.
-     */
+	 * DRY (don't repeat principle) we will use same function to validate both first
+	 * and last name since they have same validation rules. Helper method to
+	 * validate name strings. Throws IllegalArgumentException if validation fails.
+	 */
 	private void validateNameString(String name) {
 		if (name == null || name.trim().isEmpty()) {
-			// name is empty 
+			// name is empty
 			throw new IllegalArgumentException("Empty name");
 		}
 		int i = 0;
@@ -82,18 +81,19 @@ public class User {
 	private void validateEmailString(String email) {
 		// email validation logic can be implemented here
 		if (email == null || email.trim().isEmpty()) {
-			// email is empty 
+			// email is empty
 			throw new IllegalArgumentException("Empty email");
 		}
-		// further email validation can be added here (e.g. regex check for valid email format)
+		// further email validation can be added here (e.g. regex check for valid email
+		// format)
 		email = email.trim();
 		if (!email.contains("@") || !email.contains(".")) {
 			throw new IllegalArgumentException("Invalid email format");
 		}
-	}	
+	}
 
 	// helper method to validate password
-	// password has to be 
+	// password has to be
 	private void validatePasswordString(String password) {
 		if (password == null || password.isEmpty()) {
 			throw new IllegalArgumentException("Empty password");
@@ -105,8 +105,10 @@ public class User {
 		boolean hasUpper = false;
 		for (int i = 0; i < password.length(); i++) {
 			char c = password.charAt(i);
-			if (Character.isDigit(c)) hasDigit = true;
-			if (Character.isUpperCase(c)) hasUpper = true;
+			if (Character.isDigit(c))
+				hasDigit = true;
+			if (Character.isUpperCase(c))
+				hasUpper = true;
 		}
 		if (!hasDigit) {
 			throw new IllegalArgumentException("Password must contain a digit");
