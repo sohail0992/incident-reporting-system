@@ -2,11 +2,11 @@
 tdd-buildautomation-ci.pdf
 AST\ Exam.pdf
 
-# Markdown notes & AI assistant files — keep README only
+# Personal notes — keep README only
 *.md
 !README.md
 
-# Local working instructions (contains AI-related notes)
+# Local working instructions
 instructions.txt
 
 # Maven build output — must NOT be in git (exam requirement)
@@ -17,8 +17,7 @@ bin/
 # OS
 .DS_Store
 
-# NOTE: .settings/, .project, .classpath must NOT be ignored
-# The exam PDF requires all Eclipse metadata in the git repo
+# Eclipse metadata must be tracked — do not add .settings/, .project, .classpath here
 
 # Environment variables and credentials (contains secrets)
 .env
