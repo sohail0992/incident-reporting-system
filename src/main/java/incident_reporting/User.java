@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="User")
+@Table(name="users")
 public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -24,7 +24,7 @@ public class User {
     @Column(nullable=false, unique=true, length=255)
     private String email;
     
-    @Column(nullable=false, unique=true, length=255)
+    @Column(nullable=false, unique=false, length=255)
 	private String password;
     
 
