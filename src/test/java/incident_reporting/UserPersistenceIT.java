@@ -2,6 +2,9 @@ package incident_reporting;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -13,6 +16,13 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+/*
+ * Integration tests using Testcontainers.
+ * Testcontainers starts PostgreSQL automatically — no manual setup needed.
+ *
+ * To run from Eclipse: Docker must be running.
+ * Start Docker Desktop, then "Run As -> JUnit Test".
+ */
 public class UserPersistenceIT {
 
 	private static PostgreSQLContainer<?> container;
@@ -28,7 +38,13 @@ public class UserPersistenceIT {
 			.withPassword("incident_password");
 		container.start();
 
-		emf = Persistence.createEntityManagerFactory("incident_reporting");
+		Map<String, String> properties = new HashMap<>();
+		properties.put("javax.persistence.jdbc.url", container.getJdbcUrl());
+		properties.put("javax.persistence.jdbc.user", container.getUsername());
+		properties.put("javax.persistence.jdbc.password", container.getPassword());
+		properties.put("hibernate.hbm2ddl.auto", "create-drop");
+
+		emf = Persistence.createEntityManagerFactory("incident_reporting", properties);
 	}
 
 	@AfterClass
@@ -41,6 +57,10 @@ public class UserPersistenceIT {
 	public void setup() {
 		em = emf.createEntityManager();
 		dao = new UserDao(em);
+		// clean all users before each test so tests are independent
+		em.getTransaction().begin();
+		em.createQuery("delete from User").executeUpdate();
+		em.getTransaction().commit();
 	}
 
 	@After
