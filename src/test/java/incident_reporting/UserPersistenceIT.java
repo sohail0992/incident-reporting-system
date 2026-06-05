@@ -2,9 +2,6 @@ package incident_reporting;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,50 +11,36 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;
 import org.junit.Test;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 /*
- * Integration tests using Testcontainers.
- * Testcontainers starts PostgreSQL automatically — no manual setup needed.
+ * Integration tests using a real PostgreSQL database.
+ * Docker starts PostgreSQL automatically via Maven exec-maven-plugin (docker-compose up).
  *
- * To run from Eclipse: Docker must be running.
- * Start Docker Desktop, then "Run As -> JUnit Test".
+ * To run from Eclipse: start Docker manually first:
+ *   docker-compose up -d
+ * Then "Run As -> JUnit Test".
+ * Stop after: docker-compose down
  */
 public class UserPersistenceIT {
 
-	private static PostgreSQLContainer<?> container;
 	private static EntityManagerFactory emf;
 	private EntityManager em;
 	private UserDao dao;
 
 	@BeforeClass
 	public static void setupDatabase() {
-		container = new PostgreSQLContainer<>("postgres:15");
-		container.withDatabaseName("incident_db");
-		container.withUsername("incident_user");
-		container.withPassword("incident_password");
-		container.start();
-
-		Map<String, String> properties = new HashMap<>();
-		properties.put("javax.persistence.jdbc.url", container.getJdbcUrl());
-		properties.put("javax.persistence.jdbc.user", container.getUsername());
-		properties.put("javax.persistence.jdbc.password", container.getPassword());
-		properties.put("hibernate.hbm2ddl.auto", "create-drop");
-
-		emf = Persistence.createEntityManagerFactory("incident_reporting", properties);
+		emf = Persistence.createEntityManagerFactory("incident_reporting");
 	}
 
 	@AfterClass
 	public static void teardownDatabase() {
 		if (emf != null) emf.close();
-		if (container != null) container.stop();
 	}
 
 	@Before
 	public void setup() {
 		em = emf.createEntityManager();
 		dao = new UserDao(em);
-		// clean all users before each test so tests are independent
 		em.getTransaction().begin();
 		em.createQuery("delete from User").executeUpdate();
 		em.getTransaction().commit();
