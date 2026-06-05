@@ -106,19 +106,20 @@
 				</executions>
 			</plugin>
 
-			<!-- Exec Maven Plugin: auto-start/stop docker-compose for IT tests -->
+			<!-- Exec Maven Plugin: auto-start/stop docker for IT tests -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.0.0</version>
 				<executions>
 					<execution>
-						<id>docker-compose-up</id>
+						<id>docker-up</id>
 						<phase>pre-integration-test</phase>
 						<goals><goal>exec</goal></goals>
 						<configuration>
-							<executable>docker-compose</executable>
+							<executable>docker</executable>
 							<arguments>
+								<argument>compose</argument>
 								<argument>up</argument>
 								<argument>-d</argument>
 								<argument>--wait</argument>
@@ -127,12 +128,13 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>docker-compose-down</id>
+						<id>docker-down</id>
 						<phase>post-integration-test</phase>
 						<goals><goal>exec</goal></goals>
 						<configuration>
-							<executable>docker-compose</executable>
+							<executable>docker</executable>
 							<arguments>
+								<argument>compose</argument>
 								<argument>down</argument>
 							</arguments>
 							<workingDirectory>${project.basedir}</workingDirectory>
