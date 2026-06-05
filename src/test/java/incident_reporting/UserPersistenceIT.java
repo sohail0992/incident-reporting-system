@@ -14,12 +14,12 @@ import org.junit.Test;
 
 /*
  * Integration tests using a real PostgreSQL database.
- * Docker starts PostgreSQL automatically via Maven exec-maven-plugin (docker-compose up).
+ * Docker starts automatically via Maven (docker compose up) when running mvn verify.
  *
  * To run from Eclipse: start Docker manually first:
- *   docker-compose up -d
+ *   docker compose up -d
  * Then "Run As -> JUnit Test".
- * Stop after: docker-compose down
+ * Stop after: docker compose down
  */
 public class UserPersistenceIT {
 
