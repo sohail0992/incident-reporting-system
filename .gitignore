@@ -6,6 +6,9 @@ AST\ Exam.pdf
 *.md
 !README.md
 
+# Report folder — work in progress, not ready to push
+report/
+
 # Local working instructions
 instructions.txt
 
