@@ -17,6 +17,7 @@
 		<!-- Keep this list in sync with src/main/resources/META-INF/persistence.xml -->
 		<class>incident_reporting.User</class>
 		<class>incident_reporting.Tag</class>
+		<class>incident_reporting.Incident</class>
 
 		<properties>
 			<!-- H2 in-memory driver — no installation needed, it is a test dependency in pom.xml -->
