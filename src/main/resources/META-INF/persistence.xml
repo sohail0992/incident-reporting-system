@@ -17,6 +17,7 @@
 		<!-- Every entity class must be listed here so Hibernate knows about it -->
 		<class>incident_reporting.User</class>
 		<class>incident_reporting.Tag</class>
+		<class>incident_reporting.Incident</class>
 
 		<properties>
 			<!-- PostgreSQL JDBC driver -->
