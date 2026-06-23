@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<!--
+		Test config — used by unit tests only (mvn test).
+		Uses H2 in-memory database: no Docker, no setup, runs in RAM.
+		Data is gone the moment the JVM exits — clean slate every run.
+	-->
+	<persistence-unit name="incident_reporting" transaction-type="RESOURCE_LOCAL">
+
+		<!-- Same Hibernate provider, same name — Maven picks this file over the main one during mvn test -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<!-- Keep this list in sync with src/main/resources/META-INF/persistence.xml -->
+		<class>incident_reporting.User</class>
+		<class>incident_reporting.Tag</class>
+		<class>incident_reporting.Incident</class>
+
+		<properties>
+			<!-- H2 in-memory driver — no installation needed, it is a test dependency in pom.xml -->
+			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+
+			<!--
+				mem:test = database lives in RAM only.
+				DB_CLOSE_DELAY=-1 = keep the DB alive as long as the JVM is running,
+				otherwise H2 drops it after the first connection closes.
+			-->
+			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1" />
+
+			<!-- H2 default credentials -->
+			<property name="javax.persistence.jdbc.user" value="sa" />
+			<property name="javax.persistence.jdbc.password" value="" />
+
+			<!-- H2 dialect so Hibernate generates H2-compatible SQL -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+
+			<!--
+				create-drop = Hibernate creates all tables when the EMF opens
+				and drops them when it closes. No leftover data between test runs.
+				This is why unit tests do not need a manual DELETE in @Before.
+			-->
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+
+			<!-- Keep SQL logging off in unit tests — output would be noisy -->
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

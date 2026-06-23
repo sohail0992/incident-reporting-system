@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+	<!--
+		Production config — used by Main.java and integration tests (mvn verify).
+		Connects to PostgreSQL running in Docker (docker-compose.yml).
+		Docker starts automatically via exec-maven-plugin before IT tests.
+	-->
+	<persistence-unit name="incident_reporting" transaction-type="RESOURCE_LOCAL">
+
+		<!-- Hibernate is our JPA provider — translates Java objects to SQL -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+		<!-- Every entity class must be listed here so Hibernate knows about it -->
+		<class>incident_reporting.User</class>
+		<class>incident_reporting.Tag</class>
+		<class>incident_reporting.Incident</class>
+
+		<properties>
+			<!-- PostgreSQL JDBC driver -->
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+
+			<!-- Connect to local Docker container on default PostgreSQL port -->
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/incident_db" />
+
+			<!-- Credentials must match what is defined in docker-compose.yml -->
+			<property name="javax.persistence.jdbc.user" value="incident_user" />
+			<property name="javax.persistence.jdbc.password" value="incident_password" />
+
+			<!-- Tell Hibernate we are using PostgreSQL so it generates the right SQL -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect" />
+
+			<!--
+				update = Hibernate creates/alters tables to match entities but never drops data.
+				Good for development — schema evolves as we add fields.
+			-->
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+			<!-- Print every SQL statement to console — useful for debugging -->
+			<property name="hibernate.show_sql" value="true" />
+		</properties>
+	</persistence-unit>
+
+</persistence>
