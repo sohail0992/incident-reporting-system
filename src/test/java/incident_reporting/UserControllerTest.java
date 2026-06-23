@@ -37,6 +37,15 @@ public class UserControllerTest {
 		closeable = MockitoAnnotations.openMocks(this);
 	}
 
+	private User buildUser() {
+		User user = new User();
+		user.setFirstName(FIRST_NAME);
+		user.setLastName(LAST_NAME);
+		user.setEmail(EMAIL);
+		user.setPassword(PASSWORD);
+		return user;
+	}
+
 	@After
 	public void tearDown() throws Exception {
 		closeable.close();
