@@ -4,12 +4,10 @@ import java.util.List;
 
 public interface IncidentReportingView {
 
-	void showLoginError(String message);
+	void showError(String message);
 
-	void showRegistrationError(String message);
+	void showAllIncidents(List<Incident> incidents);
 
-	void showIncidents(List<Incident> incidents);
-
-	void onLoginSuccess(User user);
+	void userLoggedIn(User user);
 
 }
