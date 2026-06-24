@@ -13,19 +13,19 @@ public class UserController {
 	public void login(String email, String password) {
 		User user = userRepository.findByEmail(email);
 		if (user == null) {
-			view.showLoginError("User not found");
+			view.showError("User not found");
 			return;
 		}
 		if (!user.getPassword().equals(password)) {
-			view.showLoginError("Invalid password");
+			view.showError("Invalid password");
 			return;
 		}
-		view.onLoginSuccess(user);
+		view.userLoggedIn(user);
 	}
 
 	public void registerUser(String firstName, String lastName, String email, String password) {
 		if (userRepository.findByEmail(email) != null) {
-			view.showRegistrationError("Email already registered");
+			view.showError("Email already registered");
 			return;
 		}
 		User user = new User();

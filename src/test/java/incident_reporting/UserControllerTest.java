@@ -60,7 +60,7 @@ public class UserControllerTest {
 		userController.login(EMAIL, PASSWORD);
 
 		verify(userRepository).findByEmail(EMAIL);
-		verify(view).showLoginError("User not found");
+		verify(view).showError("User not found");
 		verifyNoMoreInteractions(userRepository);
 		verifyNoMoreInteractions(view);
 	}
@@ -73,7 +73,7 @@ public class UserControllerTest {
 		userController.login(EMAIL, "WrongPass99");
 
 		verify(userRepository).findByEmail(EMAIL);
-		verify(view).showLoginError("Invalid password");
+		verify(view).showError("Invalid password");
 		verifyNoMoreInteractions(userRepository);
 		verifyNoMoreInteractions(view);
 	}
@@ -85,7 +85,7 @@ public class UserControllerTest {
 
 		userController.login(EMAIL, PASSWORD);
 
-		verify(view).onLoginSuccess(user);
+		verify(view).userLoggedIn(user);
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class UserControllerTest {
 
 		InOrder inOrder = inOrder(userRepository, view);
 		inOrder.verify(userRepository).findByEmail(EMAIL);
-		inOrder.verify(view).onLoginSuccess(user);
+		inOrder.verify(view).userLoggedIn(user);
 		inOrder.verifyNoMoreInteractions();
 	}
 
@@ -110,7 +110,7 @@ public class UserControllerTest {
 		userController.registerUser(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD);
 
 		verify(userRepository).findByEmail(EMAIL);
-		verify(view).showRegistrationError("Email already registered");
+		verify(view).showError("Email already registered");
 		verifyNoMoreInteractions(userRepository);
 		verifyNoMoreInteractions(view);
 	}
