@@ -1,3 +1,6 @@
+# PostgreSQL for running the application manually (Main / IncidentReportingSwingApp).
+# Integration tests do not use this file: they start their own throwaway
+# container through Testcontainers during the build.
 services:
   postgres:
     image: postgres:15

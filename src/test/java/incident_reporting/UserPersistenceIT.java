@@ -2,6 +2,9 @@ package incident_reporting;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -10,18 +13,22 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 /*
  * Integration tests using a real PostgreSQL database.
- * Docker starts automatically via Maven (docker compose up) when running mvn verify.
  *
- * To run from Eclipse: start Docker manually first:
- *   docker compose up -d
- * Then "Run As -> JUnit Test".
- * Stop after: docker compose down
+ * Testcontainers starts a throwaway PostgreSQL container before the tests
+ * and removes it afterwards, so the database starts automatically both in
+ * the Maven build (mvn verify) and in Eclipse ("Run As -> JUnit Test").
+ * The only requirement is a running Docker daemon.
  */
 public class UserPersistenceIT {
+
+	@ClassRule
+	public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
 
 	private static EntityManagerFactory emf;
 	private EntityManager em;
@@ -29,7 +36,11 @@ public class UserPersistenceIT {
 
 	@BeforeClass
 	public static void setupDatabase() {
-		emf = Persistence.createEntityManagerFactory("incident_reporting");
+		Map<String, String> properties = new HashMap<>();
+		properties.put("javax.persistence.jdbc.url", postgres.getJdbcUrl());
+		properties.put("javax.persistence.jdbc.user", postgres.getUsername());
+		properties.put("javax.persistence.jdbc.password", postgres.getPassword());
+		emf = Persistence.createEntityManagerFactory("incident_reporting", properties);
 	}
 
 	@AfterClass
