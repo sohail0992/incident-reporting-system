@@ -16,7 +16,7 @@ An AST (Automated Software Testing) project built with TDD, Maven, Docker, and J
 Requirements: Java 8, Maven, Docker
 
 ```bash
-# Unit tests only (no Docker needed — uses H2 in-memory)
+# Unit tests only (no Docker needed)
 mvn clean test
 
 # Unit + integration tests (Docker starts automatically via Testcontainers)
@@ -29,7 +29,6 @@ mvn clean verify
 src/main/java/incident_reporting/   application code
 src/test/java/incident_reporting/   unit and integration tests
 src/main/resources/META-INF/        JPA persistence config (PostgreSQL)
-src/test/resources/META-INF/        JPA persistence config (H2 for unit tests)
 docker-compose.yml                  local PostgreSQL for manual development
 ```
 
