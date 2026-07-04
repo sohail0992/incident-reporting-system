@@ -9,9 +9,6 @@ AST\ Exam.pdf
 # Report folder — work in progress, not ready to push
 report/
 
-# Local working instructions
-instructions.txt
-
 # Maven build output — must NOT be in git (exam requirement)
 target/
 bin/
