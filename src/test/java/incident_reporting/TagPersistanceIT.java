@@ -65,12 +65,18 @@ public class TagPersistanceIT {
 		}
 	}
 
+	private void saveInTransaction(Tag tag) {
+		em.getTransaction().begin();
+		tagDao.save(tag);
+		em.getTransaction().commit();
+	}
+
 	@Test
 	public void testSaveTagPersistsToDatabase() {
 		Tag tag = new Tag();
 		tag.setTagTitle("Fire");
 
-		tagDao.save(tag);
+		saveInTransaction(tag);
 
 		assertTrue("Tag ID should be assigned after persist", tag.getId() > 0);
 	}
@@ -81,7 +87,7 @@ public class TagPersistanceIT {
 		tag.setTagTitle("Theft");
 		tag.setTagDescription("Incidents related to theft");
 
-		tagDao.save(tag);
+		saveInTransaction(tag);
 		int savedId = tag.getId();
 
 		Tag retrieved = tagDao.findById(savedId);
@@ -102,9 +108,9 @@ public class TagPersistanceIT {
 		Tag tag3 = new Tag();
 		tag3.setTagTitle("Theft");
 
-		tagDao.save(tag1);
-		tagDao.save(tag2);
-		tagDao.save(tag3);
+		saveInTransaction(tag1);
+		saveInTransaction(tag2);
+		saveInTransaction(tag3);
 
 		List<Tag> tags = tagDao.findAll();
 
@@ -116,7 +122,7 @@ public class TagPersistanceIT {
 		Tag tag = new Tag();
 		tag.setTagTitle("Vandalism");
 
-		tagDao.save(tag);
+		saveInTransaction(tag);
 
 		Tag retrieved = tagDao.findById(tag.getId());
 		assertNotNull(retrieved);
@@ -134,7 +140,7 @@ public class TagPersistanceIT {
 		Tag tag = new Tag();
 		tag.setTagTitle("fire  alarm");
 
-		tagDao.save(tag);
+		saveInTransaction(tag);
 
 		Tag retrieved = tagDao.findById(tag.getId());
 		assertEquals("Extra spaces should be normalized before storing", "fire alarm", retrieved.getTagTitle());
