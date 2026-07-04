@@ -5,9 +5,11 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
 	<!--
-		Production config — used by Main.java and integration tests (mvn verify).
-		Connects to PostgreSQL running in Docker (docker-compose.yml).
-		Docker starts automatically via exec-maven-plugin before IT tests.
+		Configuration for running the application (Main, IncidentReportingSwingApp)
+		against the PostgreSQL container defined in docker-compose.yml.
+		Integration tests reuse this persistence unit but override the JDBC url
+		and credentials with the values of the throwaway container started by
+		Testcontainers during the build.
 	-->
 	<persistence-unit name="incident_reporting" transaction-type="RESOURCE_LOCAL">
 
