@@ -1,7 +1,10 @@
 package incident_reporting;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalAnswers.answer;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -25,6 +28,9 @@ public class UserControllerTest {
 	private UserController userController;
 
 	@Mock
+	private TransactionManager transactionManager;
+
+	@Mock
 	private UserRepository userRepository;
 
 	@Mock
@@ -35,6 +41,11 @@ public class UserControllerTest {
 	@Before
 	public void setUp() {
 		closeable = MockitoAnnotations.openMocks(this);
+		// make sure the lambda passed to the TransactionManager
+		// is executed, using the mock repository
+		when(transactionManager.doInTransaction(any()))
+			.thenAnswer(
+				answer((UserTransactionCode<?> code) -> code.apply(userRepository)));
 	}
 
 	private User buildUser() {
@@ -61,6 +72,8 @@ public class UserControllerTest {
 
 		verify(userRepository).findByEmail(EMAIL);
 		verify(view).showError("User not found");
+		// also verify that a single transaction is executed
+		verify(transactionManager, times(1)).doInTransaction(any());
 		verifyNoMoreInteractions(userRepository);
 		verifyNoMoreInteractions(view);
 	}
@@ -74,6 +87,8 @@ public class UserControllerTest {
 
 		verify(userRepository).findByEmail(EMAIL);
 		verify(view).showError("Invalid password");
+		// also verify that a single transaction is executed
+		verify(transactionManager, times(1)).doInTransaction(any());
 		verifyNoMoreInteractions(userRepository);
 		verifyNoMoreInteractions(view);
 	}
@@ -86,6 +101,8 @@ public class UserControllerTest {
 		userController.login(EMAIL, PASSWORD);
 
 		verify(view).userLoggedIn(user);
+		// also verify that a single transaction is executed
+		verify(transactionManager, times(1)).doInTransaction(any());
 	}
 
 	@Test
@@ -111,6 +128,8 @@ public class UserControllerTest {
 
 		verify(userRepository).findByEmail(EMAIL);
 		verify(view).showError("Email already registered");
+		// also verify that a single transaction is executed
+		verify(transactionManager, times(1)).doInTransaction(any());
 		verifyNoMoreInteractions(userRepository);
 		verifyNoMoreInteractions(view);
 	}
@@ -123,8 +142,10 @@ public class UserControllerTest {
 
 		InOrder inOrder = inOrder(userRepository);
 		inOrder.verify(userRepository).findByEmail(EMAIL);
-		inOrder.verify(userRepository).save(org.mockito.ArgumentMatchers.any(User.class));
+		inOrder.verify(userRepository).save(any(User.class));
 		inOrder.verifyNoMoreInteractions();
+		// also verify that a single transaction is executed
+		verify(transactionManager, times(1)).doInTransaction(any());
 	}
 
 	@Test
