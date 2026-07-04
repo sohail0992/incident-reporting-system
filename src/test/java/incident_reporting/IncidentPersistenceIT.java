@@ -69,11 +69,14 @@ public class IncidentPersistenceIT {
 		helperUser.setLastName("Doe");
 		helperUser.setEmail("john@example.com");
 		helperUser.setPassword("SecurePass123");
-		new UserDao(em).save(helperUser);
 
 		helperTag = new Tag();
 		helperTag.setTagTitle("fire");
+
+		em.getTransaction().begin();
+		new UserDao(em).save(helperUser);
 		new TagDao(em).save(helperTag);
+		em.getTransaction().commit();
 	}
 
 	@After
@@ -83,6 +86,12 @@ public class IncidentPersistenceIT {
 		}
 	}
 
+	private void saveInTransaction(Incident incident) {
+		em.getTransaction().begin();
+		incidentDao.save(incident);
+		em.getTransaction().commit();
+	}
+
 	@Test
 	public void testSaveIncidentPersistsToDatabase() {
 		Incident incident = new Incident();
@@ -90,7 +99,7 @@ public class IncidentPersistenceIT {
 		incident.setSeverity(Severity.HIGH);
 		incident.setReportedBy(helperUser);
 
-		incidentDao.save(incident);
+		saveInTransaction(incident);
 
 		assertTrue("Incident ID should be assigned after persist", incident.getId() > 0);
 	}
@@ -102,7 +111,7 @@ public class IncidentPersistenceIT {
 		incident.setSeverity(Severity.MEDIUM);
 		incident.setReportedBy(helperUser);
 
-		incidentDao.save(incident);
+		saveInTransaction(incident);
 		int savedId = incident.getId();
 
 		Incident retrieved = incidentDao.findById(savedId);
@@ -125,8 +134,8 @@ public class IncidentPersistenceIT {
 		incident2.setSeverity(Severity.HIGH);
 		incident2.setReportedBy(helperUser);
 
-		incidentDao.save(incident1);
-		incidentDao.save(incident2);
+		saveInTransaction(incident1);
+		saveInTransaction(incident2);
 
 		List<Incident> all = incidentDao.findAll();
 		assertEquals("Should have 2 incidents in database", 2, all.size());
@@ -140,7 +149,7 @@ public class IncidentPersistenceIT {
 		incident.setReportedBy(helperUser);
 		incident.addTag(helperTag);
 
-		incidentDao.save(incident);
+		saveInTransaction(incident);
 
 		Incident retrieved = incidentDao.findById(incident.getId());
 		assertNotNull(retrieved);
@@ -155,7 +164,7 @@ public class IncidentPersistenceIT {
 		incident.setSeverity(Severity.LOW);
 		incident.setReportedBy(helperUser);
 
-		incidentDao.save(incident);
+		saveInTransaction(incident);
 
 		Incident retrieved = incidentDao.findById(incident.getId());
 		assertFalse("isClosed should default to false after persist", retrieved.isClosed());
