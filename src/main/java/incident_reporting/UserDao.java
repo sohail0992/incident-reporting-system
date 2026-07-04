@@ -12,14 +12,7 @@ public class UserDao implements UserRepository {
 	}
 
 	public void save(User user) {
-		em.getTransaction().begin();
-		try {
-			em.persist(user);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		}
+		em.persist(user);
 	}
 
 	public User findById(int id) {

@@ -13,14 +13,7 @@ public class IncidentDao {
 	}
 
 	public void save(Incident incident) {
-		em.getTransaction().begin();
-		try {
-			em.persist(incident);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		}
+		em.persist(incident);
 	}
 
 	public Incident findById(int id) {
