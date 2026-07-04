@@ -64,6 +64,12 @@ public class UserPersistenceIT {
 		}
 	}
 
+	private void saveInTransaction(User user) {
+		em.getTransaction().begin();
+		dao.save(user);
+		em.getTransaction().commit();
+	}
+
 	@Test
 	public void testSaveUserPersistsToDatabase() {
 		User user = new User();
@@ -72,7 +78,7 @@ public class UserPersistenceIT {
 		user.setEmail("john@example.com");
 		user.setPassword("SecurePass123");
 
-		dao.save(user);
+		saveInTransaction(user);
 
 		assertTrue("User ID should be assigned after persist", user.getId() > 0);
 	}
@@ -85,7 +91,7 @@ public class UserPersistenceIT {
 		user.setEmail("jane@example.com");
 		user.setPassword("AnotherPass456");
 
-		dao.save(user);
+		saveInTransaction(user);
 		int savedId = user.getId();
 
 		User retrieved = dao.findById(savedId);
@@ -110,8 +116,8 @@ public class UserPersistenceIT {
 		user2.setEmail("bob@example.com");
 		user2.setPassword("BobPass321");
 
-		dao.save(user1);
-		dao.save(user2);
+		saveInTransaction(user1);
+		saveInTransaction(user2);
 
 		assertEquals("Should have 2 users in database", 2, dao.findAll().size());
 	}
@@ -124,7 +130,7 @@ public class UserPersistenceIT {
 		user1.setEmail("duplicate@example.com");
 		user1.setPassword("DavidPass654");
 
-		dao.save(user1);
+		saveInTransaction(user1);
 
 		User user2 = new User();
 		user2.setFirstName("Eve");
@@ -132,8 +138,10 @@ public class UserPersistenceIT {
 		user2.setEmail("duplicate@example.com");
 		user2.setPassword("EvePass999");
 
+		em.getTransaction().begin();
 		try {
 			dao.save(user2);
+			em.getTransaction().commit();
 			fail("Should have thrown an exception due to duplicate email constraint");
 		} catch (Exception e) {
 			assertTrue("Exception should be thrown for duplicate email", true);

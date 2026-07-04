@@ -12,14 +12,7 @@ public class TagDao {
 	}
 	
 	public void save(Tag tag) {
-		em.getTransaction().begin();
-		try {
-			em.persist(tag);
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			em.getTransaction().rollback();
-			throw e;
-		}
+		em.persist(tag);
 	}
 
 	public Tag findById(int id) {
