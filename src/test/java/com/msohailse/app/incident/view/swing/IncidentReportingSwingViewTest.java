@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.msohailse.app.incident.controller.IncidentController;
 import com.msohailse.app.incident.controller.UserController;
+import com.msohailse.app.incident.model.User;
 
 @RunWith(GUITestRunner.class)
 public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
@@ -84,6 +85,55 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("registerPasswordTextBox").enterText("Password1");
 		window.button("registerButton").click();
 		verify(userController).registerUser("M", "Sohail", "msohail.se@gmail.com", "Password1");
+	}
+
+	// ---------------------------------------------------------------
+	// Login panel
+	// ---------------------------------------------------------------
+
+	@Test @GUITest
+	public void testControlsInitialStates() {
+		window.label(JLabelMatcher.withText("Email").andShowing());
+		window.textBox("loginEmailTextBox").requireEnabled();
+		window.label(JLabelMatcher.withText("Password").andShowing());
+		window.textBox("loginPasswordTextBox").requireEnabled();
+		window.button(JButtonMatcher.withText("Login")).requireDisabled();
+		window.label("loginErrorLabel").requireText(" ");
+	}
+
+	@Test
+	public void testWhenEitherFieldIsEmptyThenLoginButtonShouldBeDisabled() {
+		window.textBox("loginEmailTextBox").enterText("msohail@test.com");
+		// password left empty
+		window.button(JButtonMatcher.withText("Login")).requireDisabled();
+	}
+
+	@Test
+	public void testWhenEmailAndPasswordAreValidThenLoginButtonShouldBeEnabled() {
+		window.textBox("loginEmailTextBox").enterText("msohail@test.com");
+		window.textBox("loginPasswordTextBox").enterText("Password1");
+		window.button(JButtonMatcher.withText("Login")).requireEnabled();
+	}
+
+	@Test
+	public void testShowErrorShouldShowMessageInLoginErrorLabel() {
+		GuiActionRunner.execute(() -> view.showError("Invalid credentials"));
+		window.label("loginErrorLabel").requireText("Invalid credentials");
+	}
+
+	@Test
+	public void testLoginButtonShouldDelegateToUserControllerLogin() {
+		window.textBox("loginEmailTextBox").enterText("msohail@test.com");
+		window.textBox("loginPasswordTextBox").enterText("Password1");
+		window.button("loginButton").click();
+		verify(userController).login("msohail@test.com", "Password1");
+	}
+
+	@Test @GUITest
+	public void testUserLoggedInShowsMainPanelWithWelcomeMessage() {
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		GuiActionRunner.execute(() -> view.userLoggedIn(user));
+		window.label("welcomeLabel").requireText("Welcome, M!");
 	}
 
 }
