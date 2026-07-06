@@ -2,53 +2,69 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.incident_reporting</groupId>
-	<artifactId>incident_reporting</artifactId>
+	<groupId>com.msohailse.app</groupId>
+	<artifactId>incident</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<junit.version>4.13.2</junit.version>
+		<assertj.swing.version>3.17.1</assertj.swing.version>
+		<mockito.version>4.11.0</mockito.version>
 		<testcontainers.version>1.21.4</testcontainers.version>
+		<pitest.version>1.5.2</pitest.version>
+
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.organization>msohailse</sonar.organization>
+
+		<!-- Disable "Tests should include assertions": SonarCloud is not aware
+		of AssertJ Swing -->
+		<sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria.e1.ruleKey>java:S2699</sonar.issue.ignore.multicriteria.e1.ruleKey>
+		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/*SwingViewTest.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+
+		<sonar.tests>
+			${project.basedir}/src/test/java,
+			${project.basedir}/src/it/java,
+			${project.basedir}/src/e2e/java
+		</sonar.tests>
+
+		<sonar.junit.reportPaths>
+			${project.build.directory}/surefire-reports,
+			${project.build.directory}/failsafe-reports
+		</sonar.junit.reportPaths>
+
+		<sonar.coverage.exclusions>
+			**/model/*.*,
+			**/IncidentReportingSwingApp.*,
+			**/IncidentReportingSwingView.*
+		</sonar.coverage.exclusions>
 	</properties>
+
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-api</artifactId>
-			<version>2.24.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.24.3</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.26.3</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>4.11.0</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-swing-junit</artifactId>
-			<version>3.17.1</version>
+			<version>${assertj.swing.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Hibernate JPA (compatible with Java 1.8) -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -63,14 +79,8 @@
 			<version>42.5.4</version>
 		</dependency>
 
-
-		<!-- Testcontainers: throwaway PostgreSQL container for integration tests -->
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>testcontainers</artifactId>
-			<version>${testcontainers.version}</version>
-			<scope>test</scope>
-		</dependency>
+		<!-- Testcontainers: throwaway PostgreSQL container for integration
+		tests -->
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>postgresql</artifactId>
@@ -81,73 +91,272 @@
 	</dependencies>
 
 	<build>
-		<plugins>
-			<!-- Maven Compiler Plugin (Java 1.8) -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
+		<pluginManagement>
+			<plugins>
+				<!-- mutation testing -->
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<version>${pitest.version}</version>
+					<configuration>
+						<targetClasses>
+							<param>com.msohailse.app.incident.controller.*</param>
+							<param>com.msohailse.app.incident.repository.*</param>
+							<param>com.msohailse.app.incident.transaction.*</param>
+						</targetClasses>
+						<targetTests>
+							<param>com.msohailse.app.incident.*</param>
+						</targetTests>
 
-			<!-- Maven Surefire Plugin (unit tests) -->
+						<mutators>
+							<mutator>DEFAULTS</mutator>
+						</mutators>
+						<mutationThreshold>100</mutationThreshold>
+					</configuration>
+				</plugin>
+
+				<!--  to set the paths for testing explicity -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.6.1</version>
+					<executions>
+						<execution>
+							<id>add-test-source</id>
+							<phase>generate-test-sources</phase>
+							<goals>
+								<goal>add-test-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<source>src/it/java</source>
+									<source>src/e2e/java</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- Maven Surefire Plugin (unit tests) -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.5</version>
+					<configuration>
+						<excludes>
+							<exclude>**/*IT.java</exclude>
+							<exclude>**/*E2E.java</exclude>
+						</excludes>
+					</configuration>
+				</plugin>
+
+				<!-- Sends JaCoCo coverage report to coveralls.io -->
+				<plugin>
+					<groupId>com.github.hazendaz.maven</groupId>
+					<artifactId>coveralls-maven-plugin</artifactId>
+					<version>5.1.0</version>
+					<configuration>
+						<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+					</configuration>
+				</plugin>
+
+				<!-- Maven Failsafe Plugin (integration tests) -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.5.5</version>
+					<configuration>
+						<systemPropertyVariables>
+							<postgres.port>${postgres.mapped.port}</postgres.port>
+						</systemPropertyVariables>
+					</configuration>
+					<executions>
+						<execution>
+							<id>it-tests</id>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+							<configuration>
+								<includes>
+									<include>**/*IT.java</include>
+								</includes>
+							</configuration>
+						</execution>
+						<execution>
+							<id>e2e-tests</id>
+							<goals>
+								<goal>integration-test</goal>
+								<goal>verify</goal>
+							</goals>
+							<configuration>
+								<includes>
+									<include>**/*E2E.java</include>
+								</includes>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- JaCoCo: code coverage for both unit and integration tests -->
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.12</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>prepare-agent</goal>
+								<goal>prepare-agent-integration</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>report</id>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>report</goal>
+								<goal>report-integration</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- to start and stop dcoker container -->
+				<plugin>
+					<groupId>io.fabric8</groupId>
+					<artifactId>docker-maven-plugin</artifactId>
+					<version>0.48.1</version>
+					<configuration>
+						<images>
+							<image>
+								<name>postgres:15</name>
+								<run>
+									<ports>
+										<port>postgres.mapped.port:5432</port>
+									</ports>
+								</run>
+							</image>
+						</images>
+					</configuration>
+					<executions>
+						<execution>
+							<id>docker-start</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>docker-stop</id>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<!-- Active plugins — these actually run during the build -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<excludes>
-						<exclude>**/*IT.java</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
-
-			<!-- Maven Failsafe Plugin (integration tests) -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<includes>
-						<include>**/*IT.java</include>
-					</includes>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
-
-			<!-- JaCoCo: code coverage for both unit and integration tests -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-							<goal>prepare-agent-integration</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>report</goal>
-							<goal>report-integration</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+			</plugin>
 		</plugins>
 	</build>
+
+
+	<profiles>
+		<!-- to skip mutation testing if we run mvn verif -->
+		<profile>
+			<id>mutation-testing</id>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- configured also in pluginManagement -->
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-maven</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>mutationCoverage</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- we need this jacoco to run whole goals -->
+		<profile>
+			<id>jacoco</id>
+			<activation>
+				<property>
+					<name>skipCoverage</name>
+					<value>!true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/model/*.*</exclude>
+								<exclude>**/IncidentReportingSwingApp.*</exclude>
+								<exclude>**/IncidentReportingSwingView.*</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>coveralls</id>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- configured in pluginManagement -->
+						<!-- JaCoCo report is required by coveralls-maven-plugin -->
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<!-- configured in pluginManagement -->
+						<groupId>com.github.hazendaz.maven</groupId>
+						<artifactId>coveralls-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>verify</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

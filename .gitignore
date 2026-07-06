@@ -1,10 +1,9 @@
-# Reference book (not for distribution)
-tdd-buildautomation-ci.pdf
-AST\ Exam.pdf
-
 # Personal notes — keep README only
 *.md
 !README.md
+
+# Local working notes folder
+info/
 
 # Report folder — work in progress, not ready to push
 report/
