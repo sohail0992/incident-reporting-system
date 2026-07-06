@@ -4,13 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-	<!--
-		Configuration for running the application (Main, IncidentReportingSwingApp)
-		against the PostgreSQL container defined in docker-compose.yml.
-		Integration tests reuse this persistence unit but override the JDBC url
-		and credentials with the values of the throwaway container started by
-		Testcontainers during the build.
-	-->
+	<!-- IT tests override jdbc url/credentials with Testcontainers values at runtime -->
 	<persistence-unit name="incident_reporting" transaction-type="RESOURCE_LOCAL">
 
 		<!-- Hibernate is our JPA provider — translates Java objects to SQL -->
