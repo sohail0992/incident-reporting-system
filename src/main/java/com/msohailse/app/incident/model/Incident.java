@@ -55,6 +55,17 @@ public class Incident {
 		this.isClosed = false;
 	}
 
+	public Incident(int id, String title, String description, Severity severity, User reportedBy, Tag tag) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.severity = severity;
+		this.reportedBy = reportedBy;
+		this.tag = tag;
+		this.reportedAt = new Date();
+		this.isClosed = false;
+	}
+
 	public int getId() {
 		return id;
 	}

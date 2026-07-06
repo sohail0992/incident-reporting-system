@@ -18,6 +18,12 @@ public class Tag {
 
 	public Tag() {}
 
+	public Tag(int id, String tagTitle, String tagDescription) {
+		this.id = id;
+		this.tagTitle = tagTitle;
+		this.tagDescription = tagDescription;
+	}
+
 	public int getId() {
 		return id;
 	}
