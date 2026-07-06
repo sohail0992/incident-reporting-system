@@ -1,6 +1,9 @@
 package com.msohailse.app.incident.view.swing;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+
+import java.util.Arrays;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -16,6 +19,9 @@ import org.mockito.MockitoAnnotations;
 
 import com.msohailse.app.incident.controller.IncidentController;
 import com.msohailse.app.incident.controller.UserController;
+import com.msohailse.app.incident.model.Incident;
+import com.msohailse.app.incident.model.Severity;
+import com.msohailse.app.incident.model.Tag;
 import com.msohailse.app.incident.model.User;
 
 @RunWith(GUITestRunner.class)
@@ -133,6 +139,103 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	public void testUserLoggedInShowsMainPanelWithWelcomeMessage() {
 		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
 		GuiActionRunner.execute(() -> view.userLoggedIn(user));
+		window.label("welcomeLabel").requireText("Welcome, M!");
+	}
+
+	// ---------------------------------------------------------------
+	// Incident list panel
+	// ---------------------------------------------------------------
+
+	@Test @GUITest
+	public void testShowAllIncidentsShouldPopulateList() {
+		User user   = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		Tag tag     = new Tag(1, "infra", "infrastructure issues");
+		Incident i1 = new Incident(1, "Server down", "DB offline", Severity.HIGH, user, tag);
+		Incident i2 = new Incident(2, "Slow query", "Index missing", Severity.LOW, user, tag);
+		GuiActionRunner.execute(() -> view.userLoggedIn(user));
+		GuiActionRunner.execute(() -> view.showAllIncidents(Arrays.asList(i1, i2)));
+		String[] contents = window.list("incidentList").contents();
+		assertThat(contents).containsExactly(i1.toString(), i2.toString());
+	}
+
+	@Test @GUITest
+	public void testIncidentAddedShouldAddToList() {
+		User user   = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		Tag tag     = new Tag(1, "infra", "infrastructure issues");
+		Incident i1 = new Incident(1, "Server down", "DB offline", Severity.HIGH, user, tag);
+		GuiActionRunner.execute(() -> view.userLoggedIn(user));
+		GuiActionRunner.execute(() -> view.incidentAdded(i1));
+		String[] contents = window.list("incidentList").contents();
+		assertThat(contents).containsExactly(i1.toString());
+		window.label("welcomeLabel").requireText("Welcome, M!");
+	}
+
+	@Test @GUITest
+	public void testIncidentRemovedShouldRemoveFromList() {
+		User user   = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		Tag tag     = new Tag(1, "infra", "infrastructure issues");
+		Incident i1 = new Incident(1, "Server down", "DB offline", Severity.HIGH, user, tag);
+		Incident i2 = new Incident(2, "Slow query", "Index missing", Severity.LOW, user, tag);
+		GuiActionRunner.execute(() -> view.userLoggedIn(user));
+		GuiActionRunner.execute(() -> view.showAllIncidents(Arrays.asList(i1, i2)));
+		GuiActionRunner.execute(() -> view.incidentRemoved(i1));
+		String[] contents = window.list("incidentList").contents();
+		assertThat(contents).containsExactly(i2.toString());
+	}
+
+	// ---------------------------------------------------------------
+	// Add incident panel
+	// ---------------------------------------------------------------
+
+	@Test @GUITest
+	public void testAddIncidentPanelControlsInitialStates() {
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		GuiActionRunner.execute(() -> {
+			view.userLoggedIn(user);
+			view.showAddIncidentPanel();
+		});
+		window.textBox("incidentTitleTextBox").requireEnabled();
+		window.textBox("incidentDescriptionTextBox").requireEnabled();
+		window.comboBox("incidentSeverityComboBox").requireEnabled();
+		window.textBox("incidentTagTextField").requireEnabled();
+		window.label("incidentErrorLabel").requireText(" ");
+	}
+
+	@Test
+	public void testSubmitIncidentWithEmptyTagShouldShowError() {
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		GuiActionRunner.execute(() -> {
+			view.userLoggedIn(user);
+			view.showAddIncidentPanel();
+		});
+		window.textBox("incidentTitleTextBox").enterText("Server down");
+		window.textBox("incidentDescriptionTextBox").enterText("DB offline");
+		window.button("submitIncidentButton").click();
+		window.label("incidentErrorLabel").requireText("Tag cannot be empty");
+	}
+
+	@Test
+	public void testSubmitIncidentButtonShouldDelegateToIncidentController() {
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		GuiActionRunner.execute(() -> {
+			view.userLoggedIn(user);
+			view.showAddIncidentPanel();
+		});
+		window.textBox("incidentTitleTextBox").enterText("Server down");
+		window.textBox("incidentDescriptionTextBox").enterText("DB offline");
+		window.textBox("incidentTagTextField").enterText("infra");
+		window.button("submitIncidentButton").click();
+		verify(incidentController).reportIncident("Server down", "DB offline", Severity.LOW, "infra", user);
+	}
+
+	@Test
+	public void testBackButtonShouldReturnToIncidentListPanel() {
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		GuiActionRunner.execute(() -> {
+			view.userLoggedIn(user);
+			view.showAddIncidentPanel();
+		});
+		window.button("incidentBackButton").click();
 		window.label("welcomeLabel").requireText("Welcome, M!");
 	}
 
