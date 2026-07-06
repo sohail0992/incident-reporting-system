@@ -234,6 +234,15 @@
 									<ports>
 										<port>postgres.mapped.port:5432</port>
 									</ports>
+									<env>
+										<POSTGRES_DB>incident_db</POSTGRES_DB>
+										<POSTGRES_USER>incident_user</POSTGRES_USER>
+										<POSTGRES_PASSWORD>incident_password</POSTGRES_PASSWORD>
+									</env>
+									<wait>
+										<log>database system is ready to accept connections</log>
+										<time>20000</time>
+									</wait>
 								</run>
 							</image>
 						</images>
