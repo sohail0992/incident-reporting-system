@@ -94,13 +94,15 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testLoginWhenValidCallsOnLoginSuccess() {
+	public void testLoginWhenValidCallsUserLoggedInAndShowsIncidents() {
 		User user = buildUser();
 		when(incidentReportingRepository.findUserByEmail(EMAIL)).thenReturn(user);
+		when(incidentReportingRepository.findIncidentsByUser(user)).thenReturn(java.util.Collections.emptyList());
 
 		userController.login(EMAIL, PASSWORD);
 
 		verify(view).userLoggedIn(user);
+		verify(view).showAllIncidents(java.util.Collections.emptyList());
 		verify(transactionManager, times(1)).doInTransaction(any());
 	}
 
@@ -108,12 +110,14 @@ public class UserControllerTest {
 	public void testLoginWhenValidVerifiesOrder() {
 		User user = buildUser();
 		when(incidentReportingRepository.findUserByEmail(EMAIL)).thenReturn(user);
+		when(incidentReportingRepository.findIncidentsByUser(user)).thenReturn(java.util.Collections.emptyList());
 
 		userController.login(EMAIL, PASSWORD);
 
 		InOrder inOrder = inOrder(incidentReportingRepository, view);
 		inOrder.verify(incidentReportingRepository).findUserByEmail(EMAIL);
 		inOrder.verify(view).userLoggedIn(user);
+		inOrder.verify(view).showAllIncidents(java.util.Collections.emptyList());
 		inOrder.verifyNoMoreInteractions();
 	}
 

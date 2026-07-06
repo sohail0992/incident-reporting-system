@@ -25,6 +25,7 @@ public class UserController {
 				return null;
 			}
 			view.userLoggedIn(user);
+			view.showAllIncidents(repo.findIncidentsByUser(user));
 			return null;
 		});
 	}

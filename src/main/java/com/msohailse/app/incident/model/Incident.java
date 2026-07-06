@@ -127,6 +127,17 @@ public class Incident {
 		this.tag = tag;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[").append(severity).append("] ").append(title)
+		  .append(" Description: ").append(description)
+		  .append(" Category: ").append(tag == null ? "null" : tag.getTagTitle())
+		  .append(" at ").append(reportedAt);
+		return sb.toString();
+	}
+
+	
 	// helper methods
 
 	private static boolean isNullOrEmpty(String s) {
