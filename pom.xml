@@ -24,9 +24,15 @@
 
 		<!-- Disable "Tests should include assertions": SonarCloud is not aware
 		of AssertJ Swing -->
-		<sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>java:S2699</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/*SwingViewTest.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+
+		<!-- Disable "Rename class to match test naming regex": SonarCloud's default
+		regex doesn't know the *E2E.java suffix, which is required by our Failsafe
+		config and matches the book's own E2E naming convention (SchoolSwingAppE2E) -->
+		<sonar.issue.ignore.multicriteria.e2.ruleKey>java:S3577</sonar.issue.ignore.multicriteria.e2.ruleKey>
+		<sonar.issue.ignore.multicriteria.e2.resourceKey>**/*E2E.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
 
 		<sonar.tests>
 			${project.basedir}/src/test/java,
