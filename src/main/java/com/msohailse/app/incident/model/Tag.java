@@ -17,6 +17,10 @@ public class Tag {
 	
 
 	public Tag() {}
+	
+	public Tag(String tagTitle) {
+		this.tagTitle = tagTitle;
+	}
 
 	public Tag(int id, String tagTitle, String tagDescription) {
 		this.id = id;

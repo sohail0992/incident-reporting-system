@@ -196,4 +196,38 @@ public class IncidentTest {
 		firstIncident.setIsClosed(true);
 		assertTrue(firstIncident.isClosed());
 	}
+	
+	
+	@Test
+	public void testToStringWithNullTag() {
+		firstIncident.setSeverity(Severity.HIGH);
+		firstIncident.setTitle("Server Down");
+		firstIncident.setDescription("Main server crashed");
+		
+		String result = firstIncident.toString();
+		
+		assertTrue(result.contains("[HIGH]"));
+		assertTrue(result.contains("Server Down"));
+		assertTrue(result.contains("Description: Main server crashed"));
+		assertTrue(result.contains("Category: null"));
+	}
+
+	@Test
+	public void testToStringWithValidTag() {
+		firstIncident.setSeverity(Severity.LOW);
+		firstIncident.setTitle("UI Bug");
+		firstIncident.setDescription("Button misaligned");
+		
+		Tag tag = new Tag();
+		tag.setTagTitle("Frontend");
+		firstIncident.setTag(tag);
+		
+		String result = firstIncident.toString();
+		
+		assertTrue(result.contains("[LOW]"));
+		assertTrue(result.contains("UI Bug"));
+		assertTrue(result.contains("Description: Button misaligned"));
+		assertTrue(result.contains("Category: Frontend"));
+	}
+	
 }
