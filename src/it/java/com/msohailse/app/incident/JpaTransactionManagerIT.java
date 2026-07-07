@@ -3,12 +3,8 @@ package com.msohailse.app.incident;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -35,11 +31,7 @@ public class JpaTransactionManagerIT {
 
 	@BeforeClass
 	public static void setupDatabase() {
-		Map<String, String> properties = new HashMap<>();
-		properties.put("javax.persistence.jdbc.url", postgres.getJdbcUrl());
-		properties.put("javax.persistence.jdbc.user", postgres.getUsername());
-		properties.put("javax.persistence.jdbc.password", postgres.getPassword());
-		emf = Persistence.createEntityManagerFactory("incident_reporting", properties);
+		emf = PostgresITSupport.createEntityManagerFactory(postgres);
 	}
 
 	@AfterClass

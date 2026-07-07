@@ -2,13 +2,10 @@ package com.msohailse.app.incident.repository.postgres;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,6 +15,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import com.msohailse.app.incident.PostgresITSupport;
 import com.msohailse.app.incident.model.Incident;
 import com.msohailse.app.incident.model.Severity;
 import com.msohailse.app.incident.model.Tag;
@@ -37,11 +35,7 @@ public class IncidentPersistenceIT {
 
 	@BeforeClass
 	public static void setupDatabase() {
-		Map<String, String> properties = new HashMap<>();
-		properties.put("javax.persistence.jdbc.url", postgres.getJdbcUrl());
-		properties.put("javax.persistence.jdbc.user", postgres.getUsername());
-		properties.put("javax.persistence.jdbc.password", postgres.getPassword());
-		emf = Persistence.createEntityManagerFactory("incident_reporting", properties);
+		emf = PostgresITSupport.createEntityManagerFactory(postgres);
 	}
 
 	@AfterClass
