@@ -1,6 +1,6 @@
 package com.msohailse.app.incident.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @Entity
@@ -35,8 +33,7 @@ public class Incident {
 	private Severity severity;
 
 	@Column(nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date reportedAt;
+	private LocalDateTime reportedAt;
 
 	@Column(nullable=false)
 	private boolean isClosed;
@@ -53,7 +50,7 @@ public class Incident {
 	private final StringNormalizer normalizer = new StringNormalizer();
 
 	public Incident() {
-		this.reportedAt = new Date();
+		this.reportedAt = LocalDateTime.now();
 		this.isClosed = false;
 	}
 
@@ -64,7 +61,7 @@ public class Incident {
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
-		this.reportedAt = new Date();
+		this.reportedAt = LocalDateTime.now();
 		this.isClosed = false;
 	}
 
@@ -75,7 +72,7 @@ public class Incident {
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
-		this.reportedAt = new Date();
+		this.reportedAt = LocalDateTime.now();
 		this.isClosed = false;
 	}
 
@@ -111,7 +108,7 @@ public class Incident {
 		this.severity = severity;
 	}
 
-	public Date getReportedAt() {
+	public LocalDateTime getReportedAt() {
 		return reportedAt;
 	}
 

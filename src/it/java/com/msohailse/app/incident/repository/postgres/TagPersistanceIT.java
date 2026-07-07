@@ -121,4 +121,21 @@ public class TagPersistanceIT {
 		Tag retrieved = tagRepo.findById(tag.getId());
 		assertEquals("Extra spaces should be normalized before storing", "fire alarm", retrieved.getTagTitle());
 	}
+
+	@Test
+	public void testFindByTitleReturnsMatchingTag() {
+		Tag tag = new Tag("Fire");
+
+		saveInTransaction(tag);
+
+		Tag retrieved = tagRepo.findByTitle("Fire");
+		assertNotNull("Should find the tag by title", retrieved);
+		assertEquals(tag.getId(), retrieved.getId());
+	}
+
+	@Test
+	public void testFindByTitleReturnsNullWhenNoMatch() {
+		Tag retrieved = tagRepo.findByTitle("Nonexistent");
+		assertNull("Should return null when no tag matches the title", retrieved);
+	}
 }

@@ -16,11 +16,11 @@ public class UserTest {
 
 	@Test
 	public void testIdDefaultsToZeroBeforePersistence() {
-		assertTrue("Id should default to 0 before JPA persists", firstUser.getId() == 0);
+		assertEquals("Id should default to 0 before JPA persists", 0, firstUser.getId());
 	}
 
 	@Test
-	public void testFirstNameWithWhiteSpaceAtEnd() throws Exception {
+	public void testFirstNameWithWhiteSpaceAtEnd() {
 		try {
 			firstUser.setFirstName("Sohail ");
 			fail("Expected an IllegalArgumentException to be thrown");
@@ -30,7 +30,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void testFirstNameWithWhiteSpaceAtStart() throws Exception {
+	public void testFirstNameWithWhiteSpaceAtStart() {
 		try {
 			firstUser.setFirstName(" Sohail");
 			fail("Expected an IllegalArgumentException to be thrown");
@@ -40,7 +40,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void testFirstNameWithWhiteSpaceInMiddle() throws Exception {
+	public void testFirstNameWithWhiteSpaceInMiddle() {
 		try {
 			firstUser.setFirstName("Soh ail");
 			fail("Expected an IllegalArgumentException to be thrown");
@@ -50,7 +50,7 @@ public class UserTest {
 	}
 
 	@Test
-	public void testFirstNameWithWhiteSpaceOnEitherSide() throws Exception {
+	public void testFirstNameWithWhiteSpaceOnEitherSide() {
 		try {
 			firstUser.setFirstName(" Sohail ");
 			fail("Expected an IllegalArgumentException to be thrown");

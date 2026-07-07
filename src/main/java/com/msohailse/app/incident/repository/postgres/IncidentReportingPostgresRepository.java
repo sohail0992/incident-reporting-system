@@ -1,9 +1,6 @@
 package com.msohailse.app.incident.repository.postgres;
 
 import com.msohailse.app.incident.repository.IncidentReportingRepository;
-import com.msohailse.app.incident.repository.postgres.UserPostgresRepository;
-import com.msohailse.app.incident.repository.postgres.TagPostgresRepository;
-import com.msohailse.app.incident.repository.postgres.IncidentPostgresRepository;
 import com.msohailse.app.incident.model.Incident;
 import com.msohailse.app.incident.model.Tag;
 import com.msohailse.app.incident.model.User;

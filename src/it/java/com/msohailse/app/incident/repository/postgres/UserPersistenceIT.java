@@ -126,6 +126,45 @@ public class UserPersistenceIT {
 	}
 
 	@Test
+	public void testSaveDetachedExistingUserMergesChanges() {
+		User user = new User();
+		user.setFirstName("Frank");
+		user.setLastName("Foster");
+		user.setEmail("frank@example.com");
+		user.setPassword("FrankPass123");
+
+		saveInTransaction(user);
+		int savedId = user.getId();
+
+		// use a fresh EntityManager so the entity is detached (not em.contains(...))
+		// but still has a non-zero id, exercising the other merge branch
+		EntityManager freshEm = emf.createEntityManager();
+		UserPostgresRepository freshUserRepo = new UserPostgresRepository(freshEm);
+		User detachedUser = new User();
+		detachedUser.setId(savedId);
+		detachedUser.setFirstName("Franklin");
+		detachedUser.setLastName("Foster");
+		detachedUser.setEmail("frank@example.com");
+		detachedUser.setPassword("FrankPass123");
+
+		freshEm.getTransaction().begin();
+		freshUserRepo.save(detachedUser);
+		freshEm.getTransaction().commit();
+
+		// verify via the same fresh EntityManager to avoid reading a stale
+		// first-level-cache copy from the original em
+		User retrieved = freshUserRepo.findById(savedId);
+		assertEquals("First name should be updated after merging a detached entity", "Franklin", retrieved.getFirstName());
+		freshEm.close();
+	}
+
+	@Test
+	public void testFindByEmailReturnsNullWhenNoMatch() {
+		User retrieved = userRepo.findByEmail("nonexistent@example.com");
+		assertNull("Should return null when no user matches the email", retrieved);
+	}
+
+	@Test
 	public void testSaveWithDuplicateEmailThrowsException() {
 		User user1 = new User();
 		user1.setFirstName("David");

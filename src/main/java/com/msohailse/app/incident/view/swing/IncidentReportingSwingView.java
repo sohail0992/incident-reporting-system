@@ -62,16 +62,12 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 
 	// main panel
 	private JLabel welcomeLabel;
-	private JButton addIncidentButton;
-	private JList<Incident> incidentList;
 	private DefaultListModel<Incident> incidentListModel;
-	private JLabel mainErrorLabel;
 
 	// incident creation panel
 	private JTextField incidentTitleTextBox;
 	private JTextField incidentDescriptionTextBox;
 	private JTextField incidentTagTextField;
-	private JComboBox<Severity> incidentSeverityComboBox;
 	private JLabel incidentErrorLabel;
 
 	private transient UserController userController;
@@ -187,14 +183,14 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		c.gridy = 0;
 		panel.add(welcomeLabel, c);
 
-		addIncidentButton = new JButton("+ Add Incident");
+		JButton addIncidentButton = new JButton("+ Add Incident");
 		addIncidentButton.setName("addIncidentButton");
 		addIncidentButton.addActionListener(e -> cardLayout.show(rootPanel, CARD_ADD_INCIDENT));
 		c.gridy = 1;
 		panel.add(addIncidentButton, c);
 
 		incidentListModel = new DefaultListModel<>();
-		incidentList = new JList<>(incidentListModel);
+		JList<Incident> incidentList = new JList<>(incidentListModel);
 		incidentList.setName("incidentList");
 		JScrollPane scrollPane = new JScrollPane(incidentList);
 		c.gridy = 2;
@@ -202,7 +198,7 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		c.weighty = 1.0;
 		panel.add(scrollPane, c);
 
-		mainErrorLabel = new JLabel(" ");
+		JLabel mainErrorLabel = new JLabel(" ");
 		mainErrorLabel.setName("mainErrorLabel");
 		mainErrorLabel.setForeground(Color.RED);
 		c.gridy = 3;
@@ -422,7 +418,7 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		ic.gridx = 0; ic.gridy = 2; ic.weightx = 0;
 		incidentSection.add(new JLabel("Severity"), ic);
 		ic.gridx = 1; ic.weightx = 1.0;
-		incidentSeverityComboBox = new JComboBox<>(Severity.values());
+		JComboBox<Severity> incidentSeverityComboBox = new JComboBox<>(Severity.values());
 		incidentSeverityComboBox.setName("incidentSeverityComboBox");
 		incidentSection.add(incidentSeverityComboBox, ic);
 

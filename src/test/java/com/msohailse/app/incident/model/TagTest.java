@@ -16,7 +16,7 @@ public class TagTest {
 
 	@Test
 	public void testIdDefaultsToZeroBeforePersistence() {
-		assertTrue("Id should default to 0 before JPA persists", firstTag.getId() == 0);
+		assertEquals("Id should default to 0 before JPA persists", 0, firstTag.getId());
 	}
 
 	@Test
