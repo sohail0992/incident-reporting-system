@@ -7,48 +7,39 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name="tags")
+@Table(name = "tags")
 public class Tag {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
 
-	public Tag() {}
-	
+	public Tag() {
+	}
+
 	public Tag(String tagTitle) {
-		this.tagTitle = tagTitle;
+		this.tagTitle = validateAndNormalize(tagTitle);
 	}
 
 	public Tag(int id, String tagTitle, String tagDescription) {
 		this.id = id;
-		this.tagTitle = tagTitle;
-		this.tagDescription = tagDescription;
+		this.tagTitle = validateAndNormalize(tagTitle);
+		this.tagDescription = (tagDescription == null) ? null : trimAllSpaces(tagDescription);
 	}
 
 	public int getId() {
 		return id;
 	}
 
-	@Column(length=100, nullable=false, unique=false)
+	@Column(length = 100, nullable = false, unique = false)
 	private String tagTitle;
 
 	public String getTagTitle() {
 		return tagTitle;
 	}
 
-	public void setTagTitle(String tagTitle) {
-		checkIfEmpty(tagTitle, "title");
-		String normalized = trimAllSpaces(tagTitle);
-		checkIfEmpty(normalized, "title");
-		this.tagTitle = normalized;
-	}
-
-	@Column(length=500, nullable=true, unique=false)
+	@Column(length = 500, nullable = true, unique = false)
 	private String tagDescription;
-	
 
 	public String getTagDescription() {
 		return tagDescription;
@@ -61,34 +52,31 @@ public class Tag {
 		}
 		this.tagDescription = trimAllSpaces(tagDescription);
 	}
-	
-	
+
 	// helper methods
 	// check if empty or null
-	static boolean isNullOrEmpty(String sb) {
-	    return sb == null || sb.length() == 0 || sb.isEmpty();
+
+	private static boolean isNullOrEmpty(String s) {
+		return s == null || s.isEmpty();
 	}
-			
-	private String getDefaultValueIfEmpty(String fieldName) {
-		if (isNullOrEmpty(fieldName)) {
-			fieldName = "Required field";
-		}
-		return fieldName;
-	}
-			
-	private void checkIfEmpty(String value, String fieldName) {
-		fieldName = getDefaultValueIfEmpty(fieldName);
+
+	private String validateAndNormalize(String value) {
 		if (isNullOrEmpty(value)) {
-			throw new IllegalArgumentException("Empty " + fieldName);
+			throw new IllegalArgumentException("Empty tagTitle");
 		}
+		String normalized = trimAllSpaces(value);
+		if (isNullOrEmpty(normalized)) {
+			throw new IllegalArgumentException("Empty tagTitle");
+		}
+		return normalized;
 	}
-	
-	
-	// trim all white spaces
-	// we start from empty string builder and 
-	// if we found white space in original value we add one and mark lastWasSpace true
+
+	// we start from empty string builder and
+	// if we found white space in original value we add one and mark lastWasSpace
+	// true
 	// if we found another whitespace we don't append and keep the lastWasSpace true
 	// we keep ignoring the white space if lastWasSpace = true until we get actual
+	// char
 	private String trimAllSpaces(String value) {
 		StringBuilder sb = new StringBuilder();
 		boolean lastWasSpace = false;
@@ -107,5 +95,5 @@ public class Tag {
 			sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
-	
+
 }

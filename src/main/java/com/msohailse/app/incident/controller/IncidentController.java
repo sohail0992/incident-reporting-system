@@ -1,8 +1,5 @@
 package com.msohailse.app.incident.controller;
 
-import java.security.cert.PKIXRevocationChecker.Option;
-import java.util.Optional;
-
 import com.msohailse.app.incident.TransactionManager;
 import com.msohailse.app.incident.model.Incident;
 import com.msohailse.app.incident.model.Severity;
@@ -22,14 +19,12 @@ public class IncidentController {
 
 	public void reportIncident(String title, String description, Severity severity, String tagTitle, User loggedInUser) {
 		transactionManager.doInTransaction(repo -> {
-			// like by the book e optional.of but here in class to avoid
-			// static null
-			Tag tag = Optional.ofNullable(repo.findTagByTitle(tagTitle))
-					.orElseGet(() -> {
-	                    Tag newTag = new Tag(tagTitle);
-	                    repo.save(newTag);
-	                    return newTag;
-	                });
+			Tag tag = repo.findTagByTitle(tagTitle);
+			if (tag == null) {
+				tag = new Tag();
+				tag.setTagTitle(tagTitle);
+				repo.save(tag);
+			}
 			Incident incident = new Incident();
 			incident.setTitle(title);
 			incident.setDescription(description);

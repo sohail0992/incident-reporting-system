@@ -4,8 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import com.msohailse.app.incident.model.Severity;
 
 @Entity
 @Table(name="incidents")
@@ -57,8 +55,9 @@ public class Incident {
 
 	public Incident(int id, String title, String description, Severity severity, User reportedBy, Tag tag) {
 		this.id = id;
-		this.title = title;
-		this.description = description;
+		// to prevent mutation we can throw exception from constructor 
+		this.title = validateAndNormalize(title, "incidentTitle");
+		this.description = validateAndNormalize(description, "incidentDescription");
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
@@ -74,24 +73,10 @@ public class Incident {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		checkIfEmpty(title, "title");
-		String normalized = trimAllSpaces(title);
-		checkIfEmpty(normalized, "title");
-		this.title = normalized;
-	}
-
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
-		if (description == null) {
-			this.description = null;
-			return;
-		}
-		this.description = trimAllSpaces(description);
-	}
 
 	public Severity getSeverity() {
 		return severity;
@@ -154,12 +139,19 @@ public class Incident {
 	private static boolean isNullOrEmpty(String s) {
 		return s == null || s.isEmpty();
 	}
-
-	private void checkIfEmpty(String value, String fieldName) {
+	
+	private String validateAndNormalize(String value, String fieldName) {
 		if (isNullOrEmpty(value)) {
 			throw new IllegalArgumentException("Empty " + fieldName);
 		}
+		String normalized = trimAllSpaces(value);
+		if (isNullOrEmpty(normalized)) {
+			throw new IllegalArgumentException("Empty " + fieldName);
+		}
+		return normalized;
 	}
+
+
 
 	// we start from empty string builder and
 	// if we found white space in original value we add one and mark lastWasSpace true
