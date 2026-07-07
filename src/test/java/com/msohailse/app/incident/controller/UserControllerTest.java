@@ -148,11 +148,12 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testRegisterWhenValidDoesNotCallViewError() {
+	public void testRegisterWhenValidCallsUserRegistered() {
 		when(incidentReportingRepository.findUserByEmail(EMAIL)).thenReturn(null);
 
 		userController.registerUser(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD);
 
+		verify(view).userRegistered(any(User.class));
 		verifyNoMoreInteractions(view);
 	}
 

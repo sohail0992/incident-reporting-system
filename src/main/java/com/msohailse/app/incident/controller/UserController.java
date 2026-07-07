@@ -42,6 +42,7 @@ public class UserController {
 			user.setEmail(email);
 			user.setPassword(password);
 			repo.save(user);
+			view.userRegistered(user);
 			return null;
 		});
 	}
