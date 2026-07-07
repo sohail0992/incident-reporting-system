@@ -153,6 +153,10 @@
 							<exclude>**/*IT.java</exclude>
 							<exclude>**/*E2E.java</exclude>
 						</excludes>
+						<!-- assertj-swing (JDK8-era library) reflectively accesses
+							java.util.TimerTask, which JDK 9+'s module system blocks by
+							default; this grants the access it needs -->
+						<argLine>@{argLine} --add-opens java.base/java.util=ALL-UNNAMED</argLine>
 					</configuration>
 				</plugin>
 
