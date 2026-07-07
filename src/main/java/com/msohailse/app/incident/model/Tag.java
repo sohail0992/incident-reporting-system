@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tags")
@@ -14,6 +15,7 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
+	@Transient
 	private final StringNormalizer normalizer = new StringNormalizer();
 
 	public Tag() {

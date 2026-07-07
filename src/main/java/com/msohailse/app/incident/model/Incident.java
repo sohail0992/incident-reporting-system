@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="incidents")
@@ -48,6 +49,7 @@ public class Incident {
 	@JoinColumn(name="tag_id", nullable=false)
 	private Tag tag;
 
+	@Transient
 	private final StringNormalizer normalizer = new StringNormalizer();
 
 	public Incident() {
