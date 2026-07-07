@@ -15,4 +15,8 @@ public interface IncidentReportingView {
 
 	void incidentAdded(Incident incident);
 
+	void incidentRemoved(Incident incident);
+
+	void userRegistered(User user);
+
 }
