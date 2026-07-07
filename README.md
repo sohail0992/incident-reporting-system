@@ -1,6 +1,5 @@
 # Incident Reporting System
-
-Incident reporting system built with Java, PostgreSQL, Swing UI, and tested with TDD.
+Incident reporting system built with Java, JPA/Hibernate, PostgreSQL, Swing UI, and tested with TDD.
 
 [![Build Status](https://github.com/msohailse/incident-reporting-system/actions/workflows/maven.yml/badge.svg)](https://github.com/msohailse/incident-reporting-system/actions)
 [![Coverage Status](https://coveralls.io/repos/github/msohailse/incident-reporting-system/badge.svg?branch=main)](https://coveralls.io/github/msohailse/incident-reporting-system?branch=main)
