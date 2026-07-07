@@ -1,6 +1,6 @@
 # Incident Reporting System
 
-An AST (Automated Software Testing) project built with TDD, Maven, Docker, and JPA/Hibernate.
+Incident reporting system built with Java, PostgreSQL, Swing UI, and tested with TDD.
 
 [![Build Status](https://github.com/msohailse/incident-reporting-system/actions/workflows/maven.yml/badge.svg)](https://github.com/msohailse/incident-reporting-system/actions)
 [![Coverage Status](https://coveralls.io/repos/github/msohailse/incident-reporting-system/badge.svg?branch=main)](https://coveralls.io/github/msohailse/incident-reporting-system?branch=main)
