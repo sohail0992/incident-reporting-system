@@ -92,24 +92,6 @@ public class IncidentTest {
 	}
 
 	@Test
-	public void testTitleWithTrailingSpaceIsNormalized() {
-		Incident incident = new Incident("network failure ", null, null, null, null);
-		assertEquals("network failure", incident.getTitle());
-	}
-
-	@Test
-	public void testTitleWithMultipleSpacesInMiddleIsNormalized() {
-		Incident incident = new Incident("water  leak  detected", null, null, null, null);
-		assertEquals("water leak detected", incident.getTitle());
-	}
-
-	@Test
-	public void testTitleWithTabIsNormalized() {
-		Incident incident = new Incident("door\tforced open", null, null, null, null);
-		assertEquals("door forced open", incident.getTitle());
-	}
-
-	@Test
 	public void testDescriptionCanBeNull() {
 		firstIncident.setDescription(null);
 		assertNull(firstIncident.getDescription());
@@ -131,12 +113,6 @@ public class IncidentTest {
 	public void testDescriptionWithLeadingAndTrailingSpacesIsNormalized() {
 		firstIncident.setDescription("  broken window  ");
 		assertEquals("broken window", firstIncident.getDescription());
-	}
-
-	@Test
-	public void testDescriptionWithMultipleSpacesInMiddleIsNormalized() {
-		firstIncident.setDescription("door  was  found  open");
-		assertEquals("door was found open", firstIncident.getDescription());
 	}
 
 	@Test

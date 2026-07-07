@@ -42,6 +42,11 @@
 			**/IncidentReportingSwingApp.*,
 			**/IncidentReportingSwingView.*
 		</sonar.coverage.exclusions>
+
+		<sonar.coverage.jacoco.xmlReportPaths>
+			${project.build.directory}/site/jacoco/jacoco.xml,
+			${project.build.directory}/site/jacoco-it/jacoco.xml
+		</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 

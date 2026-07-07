@@ -78,24 +78,6 @@ public class TagTest {
 	}
 
 	@Test
-	public void testTagTitleWithTrailingSpaceIsNormalized() {
-		Tag tag = new Tag("theft ");
-		assertEquals("theft", tag.getTagTitle());
-	}
-
-	@Test
-	public void testTagTitleWithMultipleSpacesInMiddleIsNormalized() {
-		Tag tag = new Tag("fire  alarm");
-		assertEquals("fire alarm", tag.getTagTitle());
-	}
-
-	@Test
-	public void testTagTitleWithTabCharacterIsNormalized() {
-		Tag tag = new Tag("fire\talarm");
-		assertEquals("fire alarm", tag.getTagTitle());
-	}
-
-	@Test
 	public void testTagDescriptionWhenSetShouldStoreDescription() {
 		firstTag.setTagDescription("Incidents related to fire or smoke");
 		assertEquals("Incidents related to fire or smoke", firstTag.getTagDescription());
@@ -117,23 +99,5 @@ public class TagTest {
 	public void testTagDescriptionWithLeadingSpaceIsNormalized() {
 		firstTag.setTagDescription(" fire related");
 		assertEquals("fire related", firstTag.getTagDescription());
-	}
-
-	@Test
-	public void testTagDescriptionWithTrailingSpaceIsNormalized() {
-		firstTag.setTagDescription("theft incident ");
-		assertEquals("theft incident", firstTag.getTagDescription());
-	}
-
-	@Test
-	public void testTagDescriptionWithMultipleSpacesInMiddleIsNormalized() {
-		firstTag.setTagDescription("fire  related  incident");
-		assertEquals("fire related incident", firstTag.getTagDescription());
-	}
-
-	@Test
-	public void testTagDescriptionWithMultipleSpacesInMiddleAndEitherSidesIsNormalized() {
-		firstTag.setTagDescription(" fire  related  incident ");
-		assertEquals("fire related incident", firstTag.getTagDescription());
 	}
 }

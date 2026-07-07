@@ -14,6 +14,8 @@ public class Tag {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
+	private final StringNormalizer normalizer = new StringNormalizer();
+
 	public Tag() {
 	}
 
@@ -24,7 +26,7 @@ public class Tag {
 	public Tag(int id, String tagTitle, String tagDescription) {
 		this.id = id;
 		this.tagTitle = validateAndNormalize(tagTitle);
-		this.tagDescription = (tagDescription == null) ? null : trimAllSpaces(tagDescription);
+		this.tagDescription = (tagDescription == null) ? null : normalizer.trimAllSpaces(tagDescription);
 	}
 
 	public int getId() {
