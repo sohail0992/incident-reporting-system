@@ -2,7 +2,11 @@ name: Java CI with Maven, Docker, Coveralls and SonarCloud in Linux
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
