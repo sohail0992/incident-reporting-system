@@ -112,6 +112,8 @@
 						</targetTests>
 						<excludedTestClasses>
 							<param>com.msohailse.app.incident.view.swing.*</param>
+							<param>*IT</param>
+							<param>*E2E</param>
 						</excludedTestClasses>
 
 						<mutators>
@@ -179,11 +181,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
 					<version>3.5.5</version>
-					<configuration>
-						<systemPropertyVariables>
-							<postgres.port>${postgres.mapped.port}</postgres.port>
-						</systemPropertyVariables>
-					</configuration>
 					<executions>
 						<execution>
 							<id>it-tests</id>
@@ -234,50 +231,6 @@
 						</execution>
 					</executions>
 				</plugin>
-
-				<!-- to start and stop dcoker container -->
-				<plugin>
-					<groupId>io.fabric8</groupId>
-					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.48.1</version>
-					<configuration>
-						<images>
-							<image>
-								<name>postgres:15</name>
-								<run>
-									<ports>
-										<port>postgres.mapped.port:5432</port>
-									</ports>
-									<env>
-										<POSTGRES_DB>incident_db</POSTGRES_DB>
-										<POSTGRES_USER>incident_user</POSTGRES_USER>
-										<POSTGRES_PASSWORD>incident_password</POSTGRES_PASSWORD>
-									</env>
-									<wait>
-										<log>database system is ready to accept connections</log>
-										<time>20000</time>
-									</wait>
-								</run>
-							</image>
-						</images>
-					</configuration>
-					<executions>
-						<execution>
-							<id>docker-start</id>
-							<phase>pre-integration-test</phase>
-							<goals>
-								<goal>start</goal>
-							</goals>
-						</execution>
-						<execution>
-							<id>docker-stop</id>
-							<phase>post-integration-test</phase>
-							<goals>
-								<goal>stop</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -298,11 +251,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-			</plugin>
-
-			<plugin>
-				<groupId>io.fabric8</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
