@@ -65,8 +65,7 @@ public class TagPersistanceIT {
 
 	@Test
 	public void testSaveTagPersistsToDatabase() {
-		Tag tag = new Tag();
-		tag.setTagTitle("Fire");
+		Tag tag = new Tag("Fire");
 
 		saveInTransaction(tag);
 
@@ -75,8 +74,7 @@ public class TagPersistanceIT {
 
 	@Test
 	public void testFindByIdReturnsCorrectTag() {
-		Tag tag = new Tag();
-		tag.setTagTitle("Theft");
+		Tag tag = new Tag("Theft");
 		tag.setTagDescription("Incidents related to theft");
 
 		saveInTransaction(tag);
@@ -91,12 +89,9 @@ public class TagPersistanceIT {
 
 	@Test
 	public void testFindAllReturnsAllSavedTags() {
-		Tag tag1 = new Tag();
-		tag1.setTagTitle("Fire");
-		Tag tag2 = new Tag();
-		tag2.setTagTitle("Flood");
-		Tag tag3 = new Tag();
-		tag3.setTagTitle("Theft");
+		Tag tag1 = new Tag("Fire");
+		Tag tag2 = new Tag("Flood");
+		Tag tag3 = new Tag("Theft");
 
 		saveInTransaction(tag1);
 		saveInTransaction(tag2);
@@ -108,8 +103,7 @@ public class TagPersistanceIT {
 
 	@Test
 	public void testSaveTagWithoutDescriptionPersists() {
-		Tag tag = new Tag();
-		tag.setTagTitle("Vandalism");
+		Tag tag = new Tag("Vandalism");
 
 		saveInTransaction(tag);
 
@@ -126,8 +120,7 @@ public class TagPersistanceIT {
 
 	@Test
 	public void testSaveTagWithExtraSpacesStoredNormalized() {
-		Tag tag = new Tag();
-		tag.setTagTitle("fire  alarm");
+		Tag tag = new Tag("fire  alarm");
 
 		saveInTransaction(tag);
 

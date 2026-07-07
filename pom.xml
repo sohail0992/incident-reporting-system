@@ -15,7 +15,7 @@
 		<assertj.swing.version>3.17.1</assertj.swing.version>
 		<mockito.version>4.11.0</mockito.version>
 		<testcontainers.version>1.21.4</testcontainers.version>
-		<pitest.version>1.5.2</pitest.version>
+		<pitest.version>1.15.3</pitest.version>
 
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.organization>msohailse</sonar.organization>
@@ -101,12 +101,13 @@
 					<configuration>
 						<targetClasses>
 							<param>com.msohailse.app.incident.controller.*</param>
-							<param>com.msohailse.app.incident.repository.*</param>
-							<param>com.msohailse.app.incident.transaction.*</param>
 						</targetClasses>
 						<targetTests>
 							<param>com.msohailse.app.incident.*</param>
 						</targetTests>
+						<excludedTestClasses>
+							<param>com.msohailse.app.incident.view.swing.*</param>
+						</excludedTestClasses>
 
 						<mutators>
 							<mutator>DEFAULTS</mutator>

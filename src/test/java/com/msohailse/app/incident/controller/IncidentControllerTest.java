@@ -1,12 +1,12 @@
 package com.msohailse.app.incident.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.answer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.After;
@@ -26,8 +26,6 @@ import com.msohailse.app.incident.model.Tag;
 import com.msohailse.app.incident.model.User;
 import com.msohailse.app.incident.repository.IncidentReportingRepository;
 import com.msohailse.app.incident.view.IncidentReportingView;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class IncidentControllerTest {
 
@@ -72,8 +70,8 @@ public class IncidentControllerTest {
 
 	@Test
 	public void testReportIncidentWhenTagExistsReusesTagWithoutSaving() {
-		Tag existingTag = new Tag();
-		existingTag.setTagTitle(TAG_TITLE);
+		Tag existingTag = new Tag(TAG_TITLE);
+
 		when(incidentReportingRepository.findTagByTitle(TAG_TITLE)).thenReturn(existingTag);
 
 		incidentController.reportIncident(TITLE, DESCRIPTION, SEVERITY, TAG_TITLE, loggedInUser);
@@ -96,8 +94,7 @@ public class IncidentControllerTest {
 
 	@Test
 	public void testReportIncidentSavesIncidentWithCorrectFields() {
-		Tag existingTag = new Tag();
-		existingTag.setTagTitle(TAG_TITLE);
+		Tag existingTag = new Tag(TAG_TITLE);
 		when(incidentReportingRepository.findTagByTitle(TAG_TITLE)).thenReturn(existingTag);
 
 		incidentController.reportIncident(TITLE, DESCRIPTION, SEVERITY, TAG_TITLE, loggedInUser);
@@ -114,8 +111,7 @@ public class IncidentControllerTest {
 
 	@Test
 	public void testReportIncidentCallsIncidentAddedOnView() {
-		Tag existingTag = new Tag();
-		existingTag.setTagTitle(TAG_TITLE);
+		Tag existingTag = new Tag(TAG_TITLE);
 		when(incidentReportingRepository.findTagByTitle(TAG_TITLE)).thenReturn(existingTag);
 
 		incidentController.reportIncident(TITLE, DESCRIPTION, SEVERITY, TAG_TITLE, loggedInUser);
@@ -146,8 +142,7 @@ public class IncidentControllerTest {
 
 	@Test
 	public void testReportIncidentDoesNotCallViewError() {
-		Tag existingTag = new Tag();
-		existingTag.setTagTitle(TAG_TITLE);
+		Tag existingTag = new Tag(TAG_TITLE);
 		when(incidentReportingRepository.findTagByTitle(TAG_TITLE)).thenReturn(existingTag);
 
 		incidentController.reportIncident(TITLE, DESCRIPTION, SEVERITY, TAG_TITLE, loggedInUser);

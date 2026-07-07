@@ -21,16 +21,10 @@ public class IncidentController {
 		transactionManager.doInTransaction(repo -> {
 			Tag tag = repo.findTagByTitle(tagTitle);
 			if (tag == null) {
-				tag = new Tag();
-				tag.setTagTitle(tagTitle);
+				tag = new Tag(tagTitle);
 				repo.save(tag);
 			}
-			Incident incident = new Incident();
-			incident.setTitle(title);
-			incident.setDescription(description);
-			incident.setSeverity(severity);
-			incident.setReportedBy(loggedInUser);
-			incident.setTag(tag);
+			Incident incident = new Incident(title, description, severity, loggedInUser, tag);
 			repo.save(incident);
 			view.incidentAdded(incident);
 			return null;

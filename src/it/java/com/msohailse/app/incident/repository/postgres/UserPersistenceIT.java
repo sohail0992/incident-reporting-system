@@ -115,6 +115,24 @@ public class UserPersistenceIT {
 	}
 
 	@Test
+	public void testSaveExistingUserMergesChanges() {
+		User user = new User();
+		user.setFirstName("Charlie");
+		user.setLastName("Clark");
+		user.setEmail("charlie@example.com");
+		user.setPassword("CharliePass1");
+
+		saveInTransaction(user);
+		int savedId = user.getId();
+
+		user.setFirstName("Charles");
+		saveInTransaction(user);
+
+		User retrieved = userRepo.findById(savedId);
+		assertEquals("First name should be updated after merge", "Charles", retrieved.getFirstName());
+	}
+
+	@Test
 	public void testSaveWithDuplicateEmailThrowsException() {
 		User user1 = new User();
 		user1.setFirstName("David");

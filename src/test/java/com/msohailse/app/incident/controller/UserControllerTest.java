@@ -1,5 +1,6 @@
 package com.msohailse.app.incident.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.AdditionalAnswers.answer;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -148,12 +150,27 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testRegisterWhenValidDoesNotCallViewError() {
+	public void testRegisterWhenValidCallsUserRegistered() {
 		when(incidentReportingRepository.findUserByEmail(EMAIL)).thenReturn(null);
 
 		userController.registerUser(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD);
 
+		verify(view).userRegistered(any(User.class));
 		verifyNoMoreInteractions(view);
+	}
+
+	@Test
+	public void testRegisterWhenValidSavesUserWithCorrectFields() {
+		when(incidentReportingRepository.findUserByEmail(EMAIL)).thenReturn(null);
+
+		userController.registerUser(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD);
+
+		ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
+		verify(incidentReportingRepository).save(captor.capture());
+		User saved = captor.getValue();
+		assertThat(saved.getFirstName()).isEqualTo(FIRST_NAME);
+		assertThat(saved.getLastName()).isEqualTo(LAST_NAME);
+		assertThat(saved.getPassword()).isEqualTo(PASSWORD);
 	}
 
 	@Test

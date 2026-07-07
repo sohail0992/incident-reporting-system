@@ -66,8 +66,7 @@ public class IncidentPersistenceIT {
 		helperUser.setEmail("john@example.com");
 		helperUser.setPassword("SecurePass123");
 
-		helperTag = new Tag();
-		helperTag.setTagTitle("fire");
+		helperTag = new Tag("fire");
 
 		em.getTransaction().begin();
 		new UserPostgresRepository(em).save(helperUser);
@@ -88,11 +87,7 @@ public class IncidentPersistenceIT {
 
 	@Test
 	public void testSaveIncidentPersistsToDatabase() {
-		Incident incident = new Incident();
-		incident.setTitle("Server room overheating");
-		incident.setSeverity(Severity.HIGH);
-		incident.setReportedBy(helperUser);
-		incident.setTag(helperTag);
+		Incident incident = new Incident("Server room overheating", null, Severity.HIGH, helperUser, helperTag);
 
 		saveInTransaction(incident);
 
@@ -101,11 +96,7 @@ public class IncidentPersistenceIT {
 
 	@Test
 	public void testFindByIdReturnsCorrectIncident() {
-		Incident incident = new Incident();
-		incident.setTitle("Broken window");
-		incident.setSeverity(Severity.MEDIUM);
-		incident.setReportedBy(helperUser);
-		incident.setTag(helperTag);
+		Incident incident = new Incident("Broken window", null, Severity.MEDIUM, helperUser, helperTag);
 
 		saveInTransaction(incident);
 		int savedId = incident.getId();
@@ -120,17 +111,8 @@ public class IncidentPersistenceIT {
 
 	@Test
 	public void testFindAllReturnsAllSavedIncidents() {
-		Incident incident1 = new Incident();
-		incident1.setTitle("Water leak");
-		incident1.setSeverity(Severity.LOW);
-		incident1.setReportedBy(helperUser);
-		incident1.setTag(helperTag);
-
-		Incident incident2 = new Incident();
-		incident2.setTitle("Power outage");
-		incident2.setSeverity(Severity.HIGH);
-		incident2.setReportedBy(helperUser);
-		incident2.setTag(helperTag);
+		Incident incident1 = new Incident("Water leak", null, Severity.LOW, helperUser, helperTag);
+		Incident incident2 = new Incident("Power outage", null, Severity.HIGH, helperUser, helperTag);
 
 		saveInTransaction(incident1);
 		saveInTransaction(incident2);
@@ -141,11 +123,7 @@ public class IncidentPersistenceIT {
 
 	@Test
 	public void testSaveIncidentTagRelationshipPersists() {
-		Incident incident = new Incident();
-		incident.setTitle("Smoke detected");
-		incident.setSeverity(Severity.HIGH);
-		incident.setReportedBy(helperUser);
-		incident.setTag(helperTag);
+		Incident incident = new Incident("Smoke detected", null, Severity.HIGH, helperUser, helperTag);
 
 		saveInTransaction(incident);
 
@@ -157,11 +135,7 @@ public class IncidentPersistenceIT {
 
 	@Test
 	public void testIsClosedDefaultsFalseAfterPersist() {
-		Incident incident = new Incident();
-		incident.setTitle("Door left open");
-		incident.setSeverity(Severity.LOW);
-		incident.setReportedBy(helperUser);
-		incident.setTag(helperTag);
+		Incident incident = new Incident("Door left open", null, Severity.LOW, helperUser, helperTag);
 
 		saveInTransaction(incident);
 

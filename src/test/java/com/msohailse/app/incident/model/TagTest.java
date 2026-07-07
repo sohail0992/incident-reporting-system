@@ -31,68 +31,68 @@ public class TagTest {
 
 	@Test
 	public void testTagTitleWhenValidShouldStoreTitle() {
-		firstTag.setTagTitle("Fire");
-		assertEquals("Fire", firstTag.getTagTitle());
+		Tag tag = new Tag("Fire");
+		assertEquals("Fire", tag.getTagTitle());
 	}
 
 	@Test
 	public void testTagTitleWithSingleSpaceIsValid() {
-		firstTag.setTagTitle("fire alarm");
-		assertEquals("fire alarm", firstTag.getTagTitle());
+		Tag tag = new Tag("fire alarm");
+		assertEquals("fire alarm", tag.getTagTitle());
 	}
 
 	@Test
 	public void testTagTitleWithNull() {
 		try {
-			firstTag.setTagTitle(null);
+			new Tag((String) null);
 			fail("Expected an IllegalArgumentException to be thrown");
 		} catch (IllegalArgumentException e) {
-			assertEquals("Empty title", e.getMessage());
+			assertEquals("Empty tagTitle", e.getMessage());
 		}
 	}
 
 	@Test
 	public void testTagTitleWithEmptyString() {
 		try {
-			firstTag.setTagTitle("");
+			new Tag("");
 			fail("Expected an IllegalArgumentException to be thrown");
 		} catch (IllegalArgumentException e) {
-			assertEquals("Empty title", e.getMessage());
+			assertEquals("Empty tagTitle", e.getMessage());
 		}
 	}
 
 	@Test
 	public void testTagTitleWithOnlySpacesShouldThrow() {
 		try {
-			firstTag.setTagTitle("   ");
+			new Tag("   ");
 			fail("Expected an IllegalArgumentException to be thrown");
 		} catch (IllegalArgumentException e) {
-			assertEquals("Empty title", e.getMessage());
+			assertEquals("Empty tagTitle", e.getMessage());
 		}
 	}
 
 	@Test
 	public void testTagTitleWithLeadingSpaceIsNormalized() {
-		firstTag.setTagTitle(" fire");
-		assertEquals("fire", firstTag.getTagTitle());
+		Tag tag = new Tag(" fire");
+		assertEquals("fire", tag.getTagTitle());
 	}
 
 	@Test
 	public void testTagTitleWithTrailingSpaceIsNormalized() {
-		firstTag.setTagTitle("theft ");
-		assertEquals("theft", firstTag.getTagTitle());
+		Tag tag = new Tag("theft ");
+		assertEquals("theft", tag.getTagTitle());
 	}
 
 	@Test
 	public void testTagTitleWithMultipleSpacesInMiddleIsNormalized() {
-		firstTag.setTagTitle("fire  alarm");
-		assertEquals("fire alarm", firstTag.getTagTitle());
+		Tag tag = new Tag("fire  alarm");
+		assertEquals("fire alarm", tag.getTagTitle());
 	}
 
 	@Test
 	public void testTagTitleWithTabCharacterIsNormalized() {
-		firstTag.setTagTitle("fire\talarm");
-		assertEquals("fire alarm", firstTag.getTagTitle());
+		Tag tag = new Tag("fire\talarm");
+		assertEquals("fire alarm", tag.getTagTitle());
 	}
 
 	@Test

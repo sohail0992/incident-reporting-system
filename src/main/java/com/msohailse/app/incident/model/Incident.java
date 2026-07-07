@@ -4,8 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import com.msohailse.app.incident.model.Severity;
 
 @Entity
 @Table(name="incidents")
@@ -55,10 +53,21 @@ public class Incident {
 		this.isClosed = false;
 	}
 
+	public Incident(String title, String description, Severity severity, User reportedBy, Tag tag) {
+		// to prevent mutation we can throw exception from constructor
+		this.title = validateAndNormalize(title);
+		this.description = (description == null) ? null : trimAllSpaces(description);
+		this.severity = severity;
+		this.reportedBy = reportedBy;
+		this.tag = tag;
+		this.reportedAt = new Date();
+		this.isClosed = false;
+	}
+
 	public Incident(int id, String title, String description, Severity severity, User reportedBy, Tag tag) {
 		this.id = id;
-		this.title = title;
-		this.description = description;
+		this.title = validateAndNormalize(title);
+		this.description = (description == null) ? null : trimAllSpaces(description);
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
@@ -74,13 +83,6 @@ public class Incident {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		checkIfEmpty(title, "title");
-		String normalized = trimAllSpaces(title);
-		checkIfEmpty(normalized, "title");
-		this.title = normalized;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -92,6 +94,7 @@ public class Incident {
 		}
 		this.description = trimAllSpaces(description);
 	}
+
 
 	public Severity getSeverity() {
 		return severity;
@@ -154,12 +157,19 @@ public class Incident {
 	private static boolean isNullOrEmpty(String s) {
 		return s == null || s.isEmpty();
 	}
-
-	private void checkIfEmpty(String value, String fieldName) {
+	
+	private String validateAndNormalize(String value) {
 		if (isNullOrEmpty(value)) {
-			throw new IllegalArgumentException("Empty " + fieldName);
+			throw new IllegalArgumentException("Empty title");
 		}
+		String normalized = trimAllSpaces(value);
+		if (isNullOrEmpty(normalized)) {
+			throw new IllegalArgumentException("Empty title");
+		}
+		return normalized;
 	}
+
+
 
 	// we start from empty string builder and
 	// if we found white space in original value we add one and mark lastWasSpace true
