@@ -28,8 +28,7 @@
 
 		<sonar.tests>
 			${project.basedir}/src/test/java,
-			${project.basedir}/src/it/java,
-			${project.basedir}/src/e2e/java
+			${project.basedir}/src/it/java
 		</sonar.tests>
 
 		<sonar.junit.reportPaths>
