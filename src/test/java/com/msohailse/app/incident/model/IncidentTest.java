@@ -45,20 +45,20 @@ public class IncidentTest {
 
 	@Test
 	public void testTitleWhenValidShouldStoreTitle() {
-		firstIncident.setTitle("Server is down");
-		assertEquals("Server is down", firstIncident.getTitle());
+		Incident incident = new Incident("Server is down", null, null, null, null);
+		assertEquals("Server is down", incident.getTitle());
 	}
 
 	@Test
 	public void testTitleWithSingleSpaceIsValid() {
-		firstIncident.setTitle("power outage");
-		assertEquals("power outage", firstIncident.getTitle());
+		Incident incident = new Incident("power outage", null, null, null, null);
+		assertEquals("power outage", incident.getTitle());
 	}
 
 	@Test
 	public void testTitleWithNullShouldThrow() {
 		try {
-			firstIncident.setTitle(null);
+			new Incident(null, null, null, null, null);
 			fail("Expected an IllegalArgumentException to be thrown");
 		} catch (IllegalArgumentException e) {
 			assertEquals("Empty title", e.getMessage());
@@ -68,7 +68,7 @@ public class IncidentTest {
 	@Test
 	public void testTitleWithEmptyStringShouldThrow() {
 		try {
-			firstIncident.setTitle("");
+			new Incident("", null, null, null, null);
 			fail("Expected an IllegalArgumentException to be thrown");
 		} catch (IllegalArgumentException e) {
 			assertEquals("Empty title", e.getMessage());
@@ -78,7 +78,7 @@ public class IncidentTest {
 	@Test
 	public void testTitleWithOnlySpacesShouldThrow() {
 		try {
-			firstIncident.setTitle("   ");
+			new Incident("   ", null, null, null, null);
 			fail("Expected an IllegalArgumentException to be thrown");
 		} catch (IllegalArgumentException e) {
 			assertEquals("Empty title", e.getMessage());
@@ -87,26 +87,26 @@ public class IncidentTest {
 
 	@Test
 	public void testTitleWithLeadingSpaceIsNormalized() {
-		firstIncident.setTitle(" fire alarm");
-		assertEquals("fire alarm", firstIncident.getTitle());
+		Incident incident = new Incident(" fire alarm", null, null, null, null);
+		assertEquals("fire alarm", incident.getTitle());
 	}
 
 	@Test
 	public void testTitleWithTrailingSpaceIsNormalized() {
-		firstIncident.setTitle("network failure ");
-		assertEquals("network failure", firstIncident.getTitle());
+		Incident incident = new Incident("network failure ", null, null, null, null);
+		assertEquals("network failure", incident.getTitle());
 	}
 
 	@Test
 	public void testTitleWithMultipleSpacesInMiddleIsNormalized() {
-		firstIncident.setTitle("water  leak  detected");
-		assertEquals("water leak detected", firstIncident.getTitle());
+		Incident incident = new Incident("water  leak  detected", null, null, null, null);
+		assertEquals("water leak detected", incident.getTitle());
 	}
 
 	@Test
 	public void testTitleWithTabIsNormalized() {
-		firstIncident.setTitle("door\tforced open");
-		assertEquals("door forced open", firstIncident.getTitle());
+		Incident incident = new Incident("door\tforced open", null, null, null, null);
+		assertEquals("door forced open", incident.getTitle());
 	}
 
 	@Test
@@ -178,8 +178,7 @@ public class IncidentTest {
 
 	@Test
 	public void testSetTagWhenValidShouldStore() {
-		Tag tag = new Tag();
-		tag.setTagTitle("fire");
+		Tag tag = new Tag("fire");
 		firstIncident.setTag(tag);
 		assertEquals(tag, firstIncident.getTag());
 	}
@@ -196,16 +195,13 @@ public class IncidentTest {
 		firstIncident.setIsClosed(true);
 		assertTrue(firstIncident.isClosed());
 	}
-	
-	
+
 	@Test
 	public void testToStringWithNullTag() {
-		firstIncident.setSeverity(Severity.HIGH);
-		firstIncident.setTitle("Server Down");
-		firstIncident.setDescription("Main server crashed");
-		
-		String result = firstIncident.toString();
-		
+		Incident incident = new Incident("Server Down", "Main server crashed", Severity.HIGH, null, null);
+
+		String result = incident.toString();
+
 		assertTrue(result.contains("[HIGH]"));
 		assertTrue(result.contains("Server Down"));
 		assertTrue(result.contains("Description: Main server crashed"));
@@ -214,20 +210,15 @@ public class IncidentTest {
 
 	@Test
 	public void testToStringWithValidTag() {
-		firstIncident.setSeverity(Severity.LOW);
-		firstIncident.setTitle("UI Bug");
-		firstIncident.setDescription("Button misaligned");
-		
-		Tag tag = new Tag();
-		tag.setTagTitle("Frontend");
-		firstIncident.setTag(tag);
-		
-		String result = firstIncident.toString();
-		
+		Tag tag = new Tag("Frontend");
+		Incident incident = new Incident("UI Bug", "Button misaligned", Severity.LOW, null, tag);
+
+		String result = incident.toString();
+
 		assertTrue(result.contains("[LOW]"));
 		assertTrue(result.contains("UI Bug"));
 		assertTrue(result.contains("Description: Button misaligned"));
 		assertTrue(result.contains("Category: Frontend"));
 	}
-	
+
 }

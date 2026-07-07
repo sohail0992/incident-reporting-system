@@ -73,18 +73,11 @@ public class JpaTransactionManagerIT {
 	}
 
 	private Tag buildTag(String title) {
-		Tag tag = new Tag();
-		tag.setTagTitle(title);
-		return tag;
+		return new Tag(title);
 	}
 
 	private Incident buildIncident(String title, User user, Tag tag) {
-		Incident incident = new Incident();
-		incident.setTitle(title);
-		incident.setSeverity(Severity.HIGH);
-		incident.setReportedBy(user);
-		incident.setTag(tag);
-		return incident;
+		return new Incident(title, null, Severity.HIGH, user, tag);
 	}
 
 	@Test

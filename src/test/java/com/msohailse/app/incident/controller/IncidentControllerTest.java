@@ -1,12 +1,12 @@
 package com.msohailse.app.incident.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalAnswers.answer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import org.junit.After;
@@ -26,8 +26,6 @@ import com.msohailse.app.incident.model.Tag;
 import com.msohailse.app.incident.model.User;
 import com.msohailse.app.incident.repository.IncidentReportingRepository;
 import com.msohailse.app.incident.view.IncidentReportingView;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class IncidentControllerTest {
 

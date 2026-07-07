@@ -53,11 +53,21 @@ public class Incident {
 		this.isClosed = false;
 	}
 
+	public Incident(String title, String description, Severity severity, User reportedBy, Tag tag) {
+		// to prevent mutation we can throw exception from constructor
+		this.title = validateAndNormalize(title);
+		this.description = (description == null) ? null : trimAllSpaces(description);
+		this.severity = severity;
+		this.reportedBy = reportedBy;
+		this.tag = tag;
+		this.reportedAt = new Date();
+		this.isClosed = false;
+	}
+
 	public Incident(int id, String title, String description, Severity severity, User reportedBy, Tag tag) {
 		this.id = id;
-		// to prevent mutation we can throw exception from constructor 
-		this.title = validateAndNormalize(title, "incidentTitle");
-		this.description = validateAndNormalize(description, "incidentDescription");
+		this.title = validateAndNormalize(title);
+		this.description = (description == null) ? null : trimAllSpaces(description);
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
@@ -75,6 +85,14 @@ public class Incident {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		if (description == null) {
+			this.description = null;
+			return;
+		}
+		this.description = trimAllSpaces(description);
 	}
 
 
@@ -140,13 +158,13 @@ public class Incident {
 		return s == null || s.isEmpty();
 	}
 	
-	private String validateAndNormalize(String value, String fieldName) {
+	private String validateAndNormalize(String value) {
 		if (isNullOrEmpty(value)) {
-			throw new IllegalArgumentException("Empty " + fieldName);
+			throw new IllegalArgumentException("Empty title");
 		}
 		String normalized = trimAllSpaces(value);
 		if (isNullOrEmpty(normalized)) {
-			throw new IllegalArgumentException("Empty " + fieldName);
+			throw new IllegalArgumentException("Empty title");
 		}
 		return normalized;
 	}
