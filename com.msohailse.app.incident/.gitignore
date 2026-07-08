@@ -1,0 +1,4 @@
+# Maven build output — must NOT be in git (exam requirement)
+target/
+bin/
+*.class
