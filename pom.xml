@@ -124,13 +124,8 @@
 							<param>com.msohailse.app.incident.controller.*</param>
 						</targetClasses>
 						<targetTests>
-							<param>com.msohailse.app.incident.*</param>
+							<param>com.msohailse.app.incident.controller.*</param>
 						</targetTests>
-						<excludedTestClasses>
-							<param>com.msohailse.app.incident.view.swing.*</param>
-							<param>*IT</param>
-							<param>*E2E</param>
-						</excludedTestClasses>
 
 						<mutators>
 							<mutator>DEFAULTS</mutator>
