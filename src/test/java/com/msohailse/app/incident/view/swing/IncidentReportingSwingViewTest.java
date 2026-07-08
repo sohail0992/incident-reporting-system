@@ -93,6 +93,16 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(userController).registerUser("M", "Sohail", "msohail.se@gmail.com", "Password1");
 	}
 
+	@Test
+	public void testRegisterButtonDisabledWhenOnlyFirstNameIsMissing() {
+		GuiActionRunner.execute(() -> view.showRegisterPanel());
+		// first name left empty
+		window.textBox("registerLastNameTextBox").enterText("Sohail");
+		window.textBox("registerEmailTextBox").enterText("msohail.se@gmail.com");
+		window.textBox("registerPasswordTextBox").enterText("Password1");
+		window.button(JButtonMatcher.withText("Register")).requireDisabled();
+	}
+
 	// ---------------------------------------------------------------
 	// Login panel
 	// ---------------------------------------------------------------
@@ -119,6 +129,13 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("loginEmailTextBox").enterText("msohail@test.com");
 		window.textBox("loginPasswordTextBox").enterText("Password1");
 		window.button(JButtonMatcher.withText("Login")).requireEnabled();
+	}
+
+	@Test
+	public void testWhenEmailIsEmptyButPasswordIsFilledThenLoginButtonShouldBeDisabled() {
+		// email left empty
+		window.textBox("loginPasswordTextBox").enterText("Password1");
+		window.button(JButtonMatcher.withText("Login")).requireDisabled();
 	}
 
 	@Test
