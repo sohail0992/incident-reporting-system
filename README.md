@@ -25,6 +25,8 @@ Incident reporting system built with Java, JPA/Hibernate, PostgreSQL, Swing UI, 
 Requirements: Java 8, Maven, Docker
 
 ```bash
+cd com.msohailse.app.incident
+
 # Unit tests only (no Docker needed)
 mvn clean test
 

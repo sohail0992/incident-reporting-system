@@ -8,15 +8,8 @@ info/
 # Report folder — work in progress, not ready to push
 report/
 
-# Maven build output — must NOT be in git (exam requirement)
-target/
-bin/
-*.class
-
 # OS
 .DS_Store
-
-# Eclipse metadata must be tracked — do not add .settings/, .project, .classpath here
 
 # Environment variables and credentials (contains secrets)
 .env

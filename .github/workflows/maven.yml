@@ -40,6 +40,7 @@ jobs:
 
     - name: Build with Maven, Coveralls and SonarCloud
       run: xvfb-run mvn verify -Pcoveralls $SONARGOAL
+      working-directory: com.msohailse.app.incident
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -47,6 +48,7 @@ jobs:
     - name: Generate JUnit Report
       if: always()
       run: mvn surefire-report:report-only
+      working-directory: com.msohailse.app.incident
 
     - name: Archive JUnit Report
       if: always()
