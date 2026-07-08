@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -136,12 +137,14 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 
 	@Override
 	public void incidentAdded(Incident incident) {
-		incidentListModel.addElement(incident);
-		incidentTitleTextBox.setText("");
-		incidentDescriptionTextBox.setText("");
-		incidentTagTextField.setText("");
-		incidentErrorLabel.setText(" ");
-		cardLayout.show(rootPanel, CARD_INCIDENT_LIST);
+		SwingUtilities.invokeLater(() -> {
+			incidentListModel.addElement(incident);
+			incidentTitleTextBox.setText("");
+			incidentDescriptionTextBox.setText("");
+			incidentTagTextField.setText("");
+			incidentErrorLabel.setText(" ");
+			cardLayout.show(rootPanel, CARD_INCIDENT_LIST);
+		});
 	}
 
 	@Override
@@ -438,13 +441,12 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 				incidentErrorLabel.setText("Tag cannot be empty");
 				return;
 			}
-			incidentController.reportIncident(
-				incidentTitleTextBox.getText().trim(),
-				incidentDescriptionTextBox.getText().trim(),
-				(Severity) incidentSeverityComboBox.getSelectedItem(),
-				tagTitle,
-				loggedInUser
-			);
+			String title = incidentTitleTextBox.getText().trim();
+			String description = incidentDescriptionTextBox.getText().trim();
+			Severity severity = (Severity) incidentSeverityComboBox.getSelectedItem();
+			new Thread(() ->
+				incidentController.reportIncident(title, description, severity, tagTitle, loggedInUser)
+			).start();
 		});
 		incidentSection.add(submitIncidentButton, ic);
 

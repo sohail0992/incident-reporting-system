@@ -1,6 +1,7 @@
 package com.msohailse.app.incident.model;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,7 +51,7 @@ public class Incident {
 	private final StringNormalizer normalizer = new StringNormalizer();
 
 	public Incident() {
-		this.reportedAt = LocalDateTime.now();
+		this.reportedAt = LocalDateTime.now(ZoneId.systemDefault());
 		this.isClosed = false;
 	}
 
@@ -61,7 +62,7 @@ public class Incident {
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
-		this.reportedAt = LocalDateTime.now();
+		this.reportedAt = LocalDateTime.now(ZoneId.systemDefault());
 		this.isClosed = false;
 	}
 
@@ -72,7 +73,7 @@ public class Incident {
 		this.severity = severity;
 		this.reportedBy = reportedBy;
 		this.tag = tag;
-		this.reportedAt = LocalDateTime.now();
+		this.reportedAt = LocalDateTime.now(ZoneId.systemDefault());
 		this.isClosed = false;
 	}
 

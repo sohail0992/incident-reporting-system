@@ -1,9 +1,11 @@
 package com.msohailse.app.incident.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -240,9 +242,10 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		});
 		window.textBox("incidentTitleTextBox").enterText("Server down");
 		window.textBox("incidentDescriptionTextBox").enterText("DB offline");
+		window.comboBox("incidentSeverityComboBox").selectItem(Pattern.compile("HIGH"));
 		window.textBox("incidentTagTextField").enterText("infra");
 		window.button("submitIncidentButton").click();
-		verify(incidentController).reportIncident("Server down", "DB offline", Severity.LOW, "infra", user);
+		verify(incidentController, timeout(1000)).reportIncident("Server down", "DB offline", Severity.HIGH, "infra", user);
 	}
 
 	@Test
