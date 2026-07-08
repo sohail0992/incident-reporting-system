@@ -1,9 +1,11 @@
 package com.msohailse.app.incident.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.matcher.JButtonMatcher;
@@ -90,7 +92,17 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("registerEmailTextBox").enterText("msohail.se@gmail.com");
 		window.textBox("registerPasswordTextBox").enterText("Password1");
 		window.button("registerButton").click();
-		verify(userController).registerUser("M", "Sohail", "msohail.se@gmail.com", "Password1");
+		verify(userController, timeout(1000)).registerUser("M", "Sohail", "msohail.se@gmail.com", "Password1");
+	}
+
+	@Test
+	public void testRegisterButtonDisabledWhenOnlyFirstNameIsMissing() {
+		GuiActionRunner.execute(() -> view.showRegisterPanel());
+		// first name left empty
+		window.textBox("registerLastNameTextBox").enterText("Sohail");
+		window.textBox("registerEmailTextBox").enterText("msohail.se@gmail.com");
+		window.textBox("registerPasswordTextBox").enterText("Password1");
+		window.button(JButtonMatcher.withText("Register")).requireDisabled();
 	}
 
 	// ---------------------------------------------------------------
@@ -122,6 +134,13 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	}
 
 	@Test
+	public void testWhenEmailIsEmptyButPasswordIsFilledThenLoginButtonShouldBeDisabled() {
+		// email left empty
+		window.textBox("loginPasswordTextBox").enterText("Password1");
+		window.button(JButtonMatcher.withText("Login")).requireDisabled();
+	}
+
+	@Test
 	public void testShowErrorShouldShowMessageInLoginErrorLabel() {
 		GuiActionRunner.execute(() -> view.showError("Invalid credentials"));
 		window.label("loginErrorLabel").requireText("Invalid credentials");
@@ -132,7 +151,7 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.textBox("loginEmailTextBox").enterText("msohail@test.com");
 		window.textBox("loginPasswordTextBox").enterText("Password1");
 		window.button("loginButton").click();
-		verify(userController).login("msohail@test.com", "Password1");
+		verify(userController, timeout(1000)).login("msohail@test.com", "Password1");
 	}
 
 	@Test @GUITest
@@ -194,6 +213,7 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 			view.userLoggedIn(user);
 			view.showAddIncidentPanel();
 		});
+		robot().waitForIdle();
 		window.textBox("incidentTitleTextBox").requireEnabled();
 		window.textBox("incidentDescriptionTextBox").requireEnabled();
 		window.comboBox("incidentSeverityComboBox").requireEnabled();
@@ -208,6 +228,7 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 			view.userLoggedIn(user);
 			view.showAddIncidentPanel();
 		});
+		robot().waitForIdle();
 		window.textBox("incidentTitleTextBox").enterText("Server down");
 		window.textBox("incidentDescriptionTextBox").enterText("DB offline");
 		window.button("submitIncidentButton").click();
@@ -221,11 +242,13 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 			view.userLoggedIn(user);
 			view.showAddIncidentPanel();
 		});
+		robot().waitForIdle();
 		window.textBox("incidentTitleTextBox").enterText("Server down");
 		window.textBox("incidentDescriptionTextBox").enterText("DB offline");
+		window.comboBox("incidentSeverityComboBox").selectItem(Pattern.compile("HIGH"));
 		window.textBox("incidentTagTextField").enterText("infra");
 		window.button("submitIncidentButton").click();
-		verify(incidentController).reportIncident("Server down", "DB offline", Severity.LOW, "infra", user);
+		verify(incidentController, timeout(1000)).reportIncident("Server down", "DB offline", Severity.HIGH, "infra", user);
 	}
 
 	@Test
@@ -235,6 +258,7 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 			view.userLoggedIn(user);
 			view.showAddIncidentPanel();
 		});
+		robot().waitForIdle();
 		window.button("incidentBackButton").click();
 		window.label("welcomeLabel").requireText("Welcome, M!");
 	}

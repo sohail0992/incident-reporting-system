@@ -2,6 +2,8 @@ package com.msohailse.app.incident.view.swing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.swing.launcher.ApplicationLauncher.application;
+import static org.assertj.swing.timing.Pause.pause;
+import static org.assertj.swing.timing.Timeout.timeout;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +17,12 @@ import javax.swing.JFrame;
 import org.assertj.swing.annotation.GUITest;
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.matcher.JButtonMatcher;
+import org.assertj.swing.exception.ComponentLookupException;
 import org.assertj.swing.finder.WindowFinder;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
+import org.assertj.swing.timing.Condition;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -92,8 +96,19 @@ public class IncidentReportingSwingAppE2E extends AssertJSwingJUnitTestCase {
 		window.textBox("loginPasswordTextBox").enterText(USER_PASSWORD);
 		window.button(JButtonMatcher.withText("Login")).click();
 
-		// after a successful login the app must be showing the incident list,
-		// starting empty since this is a freshly seeded database
+		// login now runs on a background thread before calling back into the
+		// view, so wait for the incident list panel to actually appear rather
+		// than assuming it's ready as soon as the click returns
+		pause(new Condition("incident list panel to be showing") {
+			@Override
+			public boolean test() {
+				try {
+					return window.list().target().isShowing();
+				} catch (ComponentLookupException notShowingYet) {
+					return false;
+				}
+			}
+		}, timeout(5000));
 		assertThat(window.list().contents()).isEmpty();
 
 		window.button(JButtonMatcher.withText("+ Add Incident")).click();
@@ -102,6 +117,19 @@ public class IncidentReportingSwingAppE2E extends AssertJSwingJUnitTestCase {
 		window.comboBox("incidentSeverityComboBox").selectItem(Pattern.compile("HIGH"));
 		window.textBox("incidentTagTextField").enterText("fire");
 		window.button(JButtonMatcher.withText("Submit")).click();
+
+		// same reasoning: reportIncident also runs on a background thread
+		// before the new incident reaches the list, so wait for it to appear
+		pause(new Condition("new incident to appear in the list") {
+			@Override
+			public boolean test() {
+				try {
+					return window.list().contents().length == 1;
+				} catch (ComponentLookupException notShowingYet) {
+					return false;
+				}
+			}
+		}, timeout(5000));
 
 		// after submitting, the app must have navigated back to the incident
 		// list and the new incident must be shown with all its real data,

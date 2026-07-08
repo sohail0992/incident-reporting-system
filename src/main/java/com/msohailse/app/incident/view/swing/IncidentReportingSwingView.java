@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -114,45 +115,56 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 
 	@Override
 	public void showError(String message) {
-		loginErrorLabel.setText(message);
-		registerErrorLabel.setText(message);
+		SwingUtilities.invokeLater(() -> {
+			loginErrorLabel.setText(message);
+			registerErrorLabel.setText(message);
+		});
 	}
 
 	@Override
 	public void userLoggedIn(User user) {
-		this.loggedInUser = user;
-		welcomeLabel.setText("Welcome, " + user.getFirstName() + "!");
-		loginErrorLabel.setText(" ");
-		cardLayout.show(rootPanel, CARD_INCIDENT_LIST);
+		SwingUtilities.invokeLater(() -> {
+			this.loggedInUser = user;
+			welcomeLabel.setText("Welcome, " + user.getFirstName() + "!");
+			loginErrorLabel.setText(" ");
+			cardLayout.show(rootPanel, CARD_INCIDENT_LIST);
+		});
 	}
 
 	@Override
 	public void showAllIncidents(List<Incident> is) {
-		incidentListModel.clear();
-		for (Incident i : is) {
-			incidentListModel.addElement(i);
-		}
+		SwingUtilities.invokeLater(() -> {
+			incidentListModel.clear();
+			for (Incident i : is) {
+				incidentListModel.addElement(i);
+			}
+		});
 	}
 
 	@Override
 	public void incidentAdded(Incident incident) {
-		incidentListModel.addElement(incident);
-		incidentTitleTextBox.setText("");
-		incidentDescriptionTextBox.setText("");
-		incidentTagTextField.setText("");
-		incidentErrorLabel.setText(" ");
-		cardLayout.show(rootPanel, CARD_INCIDENT_LIST);
+		SwingUtilities.invokeLater(() -> {
+			incidentListModel.addElement(incident);
+			incidentTitleTextBox.setText("");
+			incidentDescriptionTextBox.setText("");
+			incidentTagTextField.setText("");
+			incidentErrorLabel.setText(" ");
+			cardLayout.show(rootPanel, CARD_INCIDENT_LIST);
+		});
 	}
 
 	@Override
 	public void incidentRemoved(Incident incident) {
-		incidentListModel.removeElement(incident);
+		SwingUtilities.invokeLater(() ->
+			incidentListModel.removeElement(incident));
 	}
 
 	@Override
 	public void userRegistered(User user) {
-		registerErrorLabel.setText(" ");
-		cardLayout.show(rootPanel, CARD_LOGIN);
+		SwingUtilities.invokeLater(() -> {
+			registerErrorLabel.setText(" ");
+			cardLayout.show(rootPanel, CARD_LOGIN);
+		});
 	}
 
 	// package-private for tests
@@ -161,7 +173,9 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 	}
 
 	void showAddIncidentPanel() {
-		cardLayout.show(rootPanel, CARD_ADD_INCIDENT);
+		// invokeLater (not a direct call) so this stays ordered after userLoggedIn's
+		// own deferred panel switch when both are called from the same test block
+		SwingUtilities.invokeLater(() -> cardLayout.show(rootPanel, CARD_ADD_INCIDENT));
 	}
 
 	// ---------------------------------------------------------------
@@ -246,10 +260,9 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		loginButton.setEnabled(false);
 		loginButton.addActionListener(e -> {
 			loginErrorLabel.setText(" ");
-			userController.login(
-				loginEmailTextBox.getText().trim(),
-				new String(loginPasswordTextBox.getPassword())
-			);
+			String email = loginEmailTextBox.getText().trim();
+			String password = new String(loginPasswordTextBox.getPassword());
+			new Thread(() -> userController.login(email, password)).start();
 		});
 		loginSection.add(loginButton, lc);
 		c.gridx = 0; c.gridy = 0;
@@ -336,12 +349,11 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		registerButton.setEnabled(false);
 		registerButton.addActionListener(e -> {
 			registerErrorLabel.setText(" ");
-			userController.registerUser(
-				registerFirstNameTextBox.getText().trim(),
-				registerLastNameTextBox.getText().trim(),
-				registerEmailTextBox.getText().trim(),
-				new String(registerPasswordTextBox.getPassword())
-			);
+			String firstName = registerFirstNameTextBox.getText().trim();
+			String lastName = registerLastNameTextBox.getText().trim();
+			String email = registerEmailTextBox.getText().trim();
+			String password = new String(registerPasswordTextBox.getPassword());
+			new Thread(() -> userController.registerUser(firstName, lastName, email, password)).start();
 		});
 		registerSection.add(registerButton, rc);
 
@@ -438,13 +450,12 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 				incidentErrorLabel.setText("Tag cannot be empty");
 				return;
 			}
-			incidentController.reportIncident(
-				incidentTitleTextBox.getText().trim(),
-				incidentDescriptionTextBox.getText().trim(),
-				(Severity) incidentSeverityComboBox.getSelectedItem(),
-				tagTitle,
-				loggedInUser
-			);
+			String title = incidentTitleTextBox.getText().trim();
+			String description = incidentDescriptionTextBox.getText().trim();
+			Severity severity = (Severity) incidentSeverityComboBox.getSelectedItem();
+			new Thread(() ->
+				incidentController.reportIncident(title, description, severity, tagTitle, loggedInUser)
+			).start();
 		});
 		incidentSection.add(submitIncidentButton, ic);
 
