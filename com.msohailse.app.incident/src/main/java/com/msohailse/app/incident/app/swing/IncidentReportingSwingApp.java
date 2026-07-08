@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -42,21 +44,26 @@ public class IncidentReportingSwingApp implements Callable<Void> {
 	@Override
 	public Void call() {
 		EventQueue.invokeLater(() -> {
-			Map<String, String> properties = new HashMap<>();
-			properties.put("javax.persistence.jdbc.url",
-					"jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName);
-			properties.put("javax.persistence.jdbc.user", dbUser);
-			properties.put("javax.persistence.jdbc.password", dbPassword);
+			try {
+				Map<String, String> properties = new HashMap<>();
+				properties.put("javax.persistence.jdbc.url",
+						"jdbc:postgresql://" + dbHost + ":" + dbPort + "/" + dbName);
+				properties.put("javax.persistence.jdbc.user", dbUser);
+				properties.put("javax.persistence.jdbc.password", dbPassword);
 
-			EntityManagerFactory emf =
-				Persistence.createEntityManagerFactory("incident_reporting", properties);
-			JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
-			IncidentReportingSwingView view = new IncidentReportingSwingView();
-			UserController userController = new UserController(transactionManager, view);
-			IncidentController incidentController = new IncidentController(transactionManager, view);
-			view.setUserController(userController);
-			view.setIncidentController(incidentController);
-			view.setVisible(true);
+				EntityManagerFactory emf =
+					Persistence.createEntityManagerFactory("incident_reporting", properties);
+				JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
+				IncidentReportingSwingView view = new IncidentReportingSwingView();
+				UserController userController = new UserController(transactionManager, view);
+				IncidentController incidentController = new IncidentController(transactionManager, view);
+				view.setUserController(userController);
+				view.setIncidentController(incidentController);
+				view.setVisible(true);
+			} catch (Exception e) {
+				Logger.getLogger(getClass().getName())
+					.log(Level.SEVERE, "Exception", e);
+			}
 		});
 		return null;
 	}
