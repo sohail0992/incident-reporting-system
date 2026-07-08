@@ -28,7 +28,10 @@ Requirements: Java 8, Maven, Docker
 # Unit tests only (no Docker needed)
 mvn clean test
 
-# Unit + integration tests (Docker starts automatically via Testcontainers)
+# Unit + UI + IT + E2E (Docker starts automatically via Testcontainers)
 mvn clean verify
+
+# Unit + UI + Mutation + IT + E2E
+mvn verify -Pmutation-testing
 ```
 
