@@ -35,7 +35,7 @@ public class IncidentReportingSwingApp implements Callable<Void> {
 	private String dbUser = "incident_user";
 
 	@Option(names = { "--db-password" }, description = "Database password")
-	private String dbPassword = "incident_password";
+	private String dbPassword = "";
 
 	public static void main(String[] args) {
 		new CommandLine(new IncidentReportingSwingApp()).execute(args);

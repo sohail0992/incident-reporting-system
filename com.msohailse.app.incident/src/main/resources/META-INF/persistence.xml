@@ -22,9 +22,10 @@
 			<!-- Connect to local Docker container on default PostgreSQL port -->
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/incident_db" />
 
-			<!-- Credentials must match what is defined in docker-compose.yml -->
+			<!-- User must match what is defined in docker-compose.yml; no password
+				property needed since that container runs with
+				POSTGRES_HOST_AUTH_METHOD=trust (local dev only, no real auth) -->
 			<property name="javax.persistence.jdbc.user" value="incident_user" />
-			<property name="javax.persistence.jdbc.password" value="incident_password" />
 
 			<!-- Tell Hibernate we are using PostgreSQL so it generates the right SQL -->
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect" />

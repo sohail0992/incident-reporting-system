@@ -7,8 +7,8 @@ services:
     container_name: incident_reporting_db
     environment:
       POSTGRES_USER: incident_user
-      POSTGRES_PASSWORD: incident_password
       POSTGRES_DB: incident_db
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
       - "5432:5432"
     volumes:
