@@ -5,6 +5,9 @@
 # Local working notes folder
 info/
 
+# Local scratch folder for failed GUI test screenshots/artifacts
+/failed-gui-tests/
+
 # Report folder — work in progress, not ready to push
 report/
 
