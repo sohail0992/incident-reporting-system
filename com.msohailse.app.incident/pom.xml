@@ -85,6 +85,13 @@
 			<version>5.6.15.Final</version>
 		</dependency>
 
+		<!-- required to see Hibernate logs -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+
 		<!-- PostgreSQL driver -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
