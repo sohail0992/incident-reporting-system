@@ -2,7 +2,7 @@
 Incident reporting system built with Java, JPA/Hibernate, PostgreSQL, Swing UI, and tested with TDD.
 
 [![Build Status](https://github.com/msohailse/incident-reporting-system/actions/workflows/maven.yml/badge.svg)](https://github.com/msohailse/incident-reporting-system/actions)
-[![Coverage Status](https://coveralls.io/repos/github/msohailse/incident-reporting-system/badge.svg?branch=main)](https://coveralls.io/github/msohailse/incident-reporting-system?branch=main&kill_cache=1,)
+[![Coverage Status](https://coveralls.io/repos/github/msohailse/incident-reporting-system/badge.svg?branch=main)](https://coveralls.io/github/msohailse/incident-reporting-system?branch=main)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.msohailse.app%3Aincident&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=com.msohailse.app%3Aincident)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=com.msohailse.app%3Aincident&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=com.msohailse.app%3Aincident)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=com.msohailse.app%3Aincident&metric=bugs)](https://sonarcloud.io/summary/new_code?id=com.msohailse.app%3Aincident)
