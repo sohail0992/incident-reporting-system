@@ -66,14 +66,10 @@ public class IncidentReportingSwingAppE2E extends AssertJSwingJUnitTestCase {
 		em.close();
 
 		application("com.msohailse.app.incident.app.swing.IncidentReportingSwingApp")
-			.withArgs(
-				"--db-host=" + postgres.getHost(),
-				"--db-port=" + postgres.getFirstMappedPort(),
-				"--db-name=" + postgres.getDatabaseName(),
-				"--db-user=" + postgres.getUsername(),
-				"--db-password=" + postgres.getPassword()
-			)
-			.start();
+				.withArgs("--db-host=" + postgres.getHost(), "--db-port=" + postgres.getFirstMappedPort(),
+						"--db-name=" + postgres.getDatabaseName(), "--db-user=" + postgres.getUsername(),
+						"--db-password=" + postgres.getPassword())
+				.start();
 
 		window = WindowFinder.findFrame(new GenericTypeMatcher<JFrame>(JFrame.class) {
 			@Override
@@ -90,7 +86,8 @@ public class IncidentReportingSwingAppE2E extends AssertJSwingJUnitTestCase {
 		}
 	}
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testLoginAndReportIncidentEndToEnd() {
 		window.textBox("loginEmailTextBox").enterText(USER_EMAIL);
 		window.textBox("loginPasswordTextBox").enterText(USER_PASSWORD);
@@ -126,9 +123,7 @@ public class IncidentReportingSwingAppE2E extends AssertJSwingJUnitTestCase {
 		// including the severity actually selected in the combo box and the
 		// tag that the app created on the fly since it didn't exist yet in
 		// the seeded database
-		assertThat(window.list().contents())
-			.hasSize(1)
-			.anySatisfy(e -> assertThat(e)
-				.contains("HIGH", "Server room overheating", "Cooling system failure detected", "fire"));
+		assertThat(window.list().contents()).hasSize(1).anySatisfy(e -> assertThat(e).contains("HIGH",
+				"Server room overheating", "Cooling system failure detected", "fire"));
 	}
 }

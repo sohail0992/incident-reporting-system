@@ -40,7 +40,8 @@ public class IncidentPersistenceIT {
 
 	@AfterClass
 	public static void teardownDatabase() {
-		if (emf != null) emf.close();
+		if (emf != null)
+			emf.close();
 	}
 
 	@Before
@@ -70,7 +71,8 @@ public class IncidentPersistenceIT {
 
 	@After
 	public void cleanup() {
-		if (em != null && em.isOpen()) em.close();
+		if (em != null && em.isOpen())
+			em.close();
 	}
 
 	private void saveInTransaction(Incident incident) {

@@ -32,8 +32,10 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	private IncidentReportingSwingView view;
 
-	@Mock private UserController userController;
-	@Mock private IncidentController incidentController;
+	@Mock
+	private UserController userController;
+	@Mock
+	private IncidentController incidentController;
 
 	private AutoCloseable closeable;
 
@@ -64,7 +66,8 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	// Register panel
 	// ---------------------------------------------------------------
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testRegisterPanelControlsInitialStates() {
 		GuiActionRunner.execute(() -> view.showRegisterPanel());
 		window.label(JLabelMatcher.withText("First Name").andShowing());
@@ -109,7 +112,8 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	// Login panel
 	// ---------------------------------------------------------------
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testControlsInitialStates() {
 		window.label(JLabelMatcher.withText("Email").andShowing());
 		window.textBox("loginEmailTextBox").requireEnabled();
@@ -154,7 +158,8 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		verify(userController).login("msohail@test.com", "Password1");
 	}
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testUserLoggedInShowsMainPanelWithWelcomeMessage() {
 		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
 		GuiActionRunner.execute(() -> view.userLoggedIn(user));
@@ -165,10 +170,11 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	// Incident list panel
 	// ---------------------------------------------------------------
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testShowAllIncidentsShouldPopulateList() {
-		User user   = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
-		Tag tag     = new Tag(1, "infra", "infrastructure issues");
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		Tag tag = new Tag(1, "infra", "infrastructure issues");
 		Incident i1 = new Incident(1, "Server down", "DB offline", Severity.HIGH, user, tag);
 		Incident i2 = new Incident(2, "Slow query", "Index missing", Severity.LOW, user, tag);
 		GuiActionRunner.execute(() -> view.userLoggedIn(user));
@@ -177,10 +183,11 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		assertThat(contents).containsExactly(i1.toString(), i2.toString());
 	}
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testIncidentAddedShouldAddToList() {
-		User user   = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
-		Tag tag     = new Tag(1, "infra", "infrastructure issues");
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		Tag tag = new Tag(1, "infra", "infrastructure issues");
 		Incident i1 = new Incident(1, "Server down", "DB offline", Severity.HIGH, user, tag);
 		GuiActionRunner.execute(() -> view.userLoggedIn(user));
 		GuiActionRunner.execute(() -> view.incidentAdded(i1));
@@ -189,10 +196,11 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.label("welcomeLabel").requireText("Welcome, M!");
 	}
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testIncidentRemovedShouldRemoveFromList() {
-		User user   = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
-		Tag tag     = new Tag(1, "infra", "infrastructure issues");
+		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
+		Tag tag = new Tag(1, "infra", "infrastructure issues");
 		Incident i1 = new Incident(1, "Server down", "DB offline", Severity.HIGH, user, tag);
 		Incident i2 = new Incident(2, "Slow query", "Index missing", Severity.LOW, user, tag);
 		GuiActionRunner.execute(() -> view.userLoggedIn(user));
@@ -206,7 +214,8 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 	// Add incident panel
 	// ---------------------------------------------------------------
 
-	@Test @GUITest
+	@Test
+	@GUITest
 	public void testAddIncidentPanelControlsInitialStates() {
 		User user = new User(1, "M", "Sohail", "msohail@test.com", "Password1");
 		GuiActionRunner.execute(() -> {
@@ -245,7 +254,8 @@ public class IncidentReportingSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.comboBox("incidentSeverityComboBox").selectItem(Pattern.compile("HIGH"));
 		window.textBox("incidentTagTextField").enterText("infra");
 		window.button("submitIncidentButton").click();
-		verify(incidentController, timeout(1000)).reportIncident("Server down", "DB offline", Severity.HIGH, "infra", user);
+		verify(incidentController, timeout(1000)).reportIncident("Server down", "DB offline", Severity.HIGH, "infra",
+				user);
 	}
 
 	@Test

@@ -50,8 +50,7 @@ public class UserControllerTest {
 	public void setUp() {
 		closeable = MockitoAnnotations.openMocks(this);
 		when(transactionManager.doInTransaction(any()))
-			.thenAnswer(
-				answer((TransactionCode<?> code) -> code.apply(incidentReportingRepository)));
+				.thenAnswer(answer((TransactionCode<?> code) -> code.apply(incidentReportingRepository)));
 	}
 
 	@After
@@ -178,7 +177,6 @@ public class UserControllerTest {
 		when(incidentReportingRepository.findUserByEmail("notanemail")).thenReturn(null);
 
 		assertThatThrownBy(() -> userController.registerUser(FIRST_NAME, LAST_NAME, "notanemail", PASSWORD))
-				.isInstanceOf(IllegalArgumentException.class)
-				.hasMessage("Invalid email format");
+				.isInstanceOf(IllegalArgumentException.class).hasMessage("Invalid email format");
 	}
 }

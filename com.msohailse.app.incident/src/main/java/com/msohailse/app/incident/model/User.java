@@ -8,25 +8,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
-    @Column(length=50, nullable=false, unique=false)
-	private String firstName;
-    
-    @Column(length=50, nullable=false, unique=false)
-	private String lastName;
-    
 
-    @Column(nullable=false, unique=true, length=255)
-    private String email;
-    
-    @Column(nullable=false, unique=false, length=255)
+	@Column(length = 50, nullable = false, unique = false)
+	private String firstName;
+
+	@Column(length = 50, nullable = false, unique = false)
+	private String lastName;
+
+	@Column(nullable = false, unique = true, length = 255)
+	private String email;
+
+	@Column(nullable = false, unique = false, length = 255)
 	private String password;
-    
 
 	public User() {
 	}

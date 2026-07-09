@@ -4,8 +4,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 
-	<!-- IT tests override jdbc url/credentials with Testcontainers values at runtime -->
-	<persistence-unit name="incident_reporting" transaction-type="RESOURCE_LOCAL">
+	<!-- IT tests override jdbc url/credentials with Testcontainers values at
+	runtime -->
+	<persistence-unit name="incident_reporting"
+		transaction-type="RESOURCE_LOCAL">
 
 		<!-- Hibernate is our JPA provider — translates Java objects to SQL -->
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -17,21 +19,27 @@
 
 		<properties>
 			<!-- PostgreSQL JDBC driver -->
-			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.driver"
+				value="org.postgresql.Driver" />
 
 			<!-- Connect to local Docker container on default PostgreSQL port -->
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/incident_db" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:postgresql://localhost:5432/incident_db" />
 
-			<!-- User must match what is defined in docker-compose.yml; no password
+			<!-- User must match what is defined in docker-compose.yml; no
+			password
 				property needed since that container runs with
 				POSTGRES_HOST_AUTH_METHOD=trust (local dev only, no real auth) -->
 			<property name="javax.persistence.jdbc.user" value="incident_user" />
 
-			<!-- Tell Hibernate we are using PostgreSQL so it generates the right SQL -->
-			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL10Dialect" />
+			<!-- Tell Hibernate we are using PostgreSQL so it generates the
+			right SQL -->
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQL10Dialect" />
 
 			<!--
-				update = Hibernate creates/alters tables to match entities but never drops data.
+				update = Hibernate creates/alters tables to match entities but never drops
+			data.
 				Good for development — schema evolves as we add fields.
 			-->
 			<property name="hibernate.hbm2ddl.auto" value="update" />

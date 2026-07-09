@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface IncidentRepository {
 	void save(Incident incident);
+
 	Incident findById(int id);
+
 	List<Incident> findAll();
+
 	List<Incident> findByUser(User user);
 }

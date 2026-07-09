@@ -34,7 +34,8 @@ public class TagPersistanceIT {
 
 	@AfterClass
 	public static void teardownDatabase() {
-		if (emf != null) emf.close();
+		if (emf != null)
+			emf.close();
 	}
 
 	@Before
@@ -48,7 +49,8 @@ public class TagPersistanceIT {
 
 	@After
 	public void cleanup() {
-		if (em != null && em.isOpen()) em.close();
+		if (em != null && em.isOpen())
+			em.close();
 	}
 
 	private void saveInTransaction(Tag tag) {

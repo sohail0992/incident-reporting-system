@@ -161,8 +161,7 @@ public class IncidentTest {
 
 	@Test
 	public void testSetTagNullShouldThrow() {
-		IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
-				() -> firstIncident.setTag(null));
+		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> firstIncident.setTag(null));
 		assertEquals("Tag cannot be null", e.getMessage());
 	}
 

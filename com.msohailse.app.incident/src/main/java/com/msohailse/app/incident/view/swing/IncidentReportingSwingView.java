@@ -35,10 +35,10 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String CARD_LOGIN         = "LOGIN";
-	private static final String CARD_REGISTER      = "REGISTER";
+	private static final String CARD_LOGIN = "LOGIN";
+	private static final String CARD_REGISTER = "REGISTER";
 	private static final String CARD_INCIDENT_LIST = "INCIDENT_LIST";
-	private static final String CARD_ADD_INCIDENT  = "ADD_INCIDENT";
+	private static final String CARD_ADD_INCIDENT = "ADD_INCIDENT";
 
 	private CardLayout cardLayout;
 	private JPanel rootPanel;
@@ -227,41 +227,48 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		lc.fill = GridBagConstraints.HORIZONTAL;
 		lc.insets = new Insets(8, 6, 8, 6);
 
-		lc.gridx = 0; lc.gridy = 0; lc.weightx = 0;
+		lc.gridx = 0;
+		lc.gridy = 0;
+		lc.weightx = 0;
 		loginSection.add(new JLabel("Email"), lc);
-		lc.gridx = 1; lc.weightx = 1.0;
+		lc.gridx = 1;
+		lc.weightx = 1.0;
 		loginEmailTextBox = new JTextField(20);
 		loginEmailTextBox.setName("loginEmailTextBox");
 		loginEmailTextBox.setText("");
 		loginSection.add(loginEmailTextBox, lc);
 
-		lc.gridx = 0; lc.gridy = 1; lc.weightx = 0;
+		lc.gridx = 0;
+		lc.gridy = 1;
+		lc.weightx = 0;
 		loginSection.add(new JLabel("Password"), lc);
-		lc.gridx = 1; lc.weightx = 1.0;
+		lc.gridx = 1;
+		lc.weightx = 1.0;
 		loginPasswordTextBox = new JPasswordField(20);
 		loginPasswordTextBox.setName("loginPasswordTextBox");
 		loginPasswordTextBox.setText("");
 		loginSection.add(loginPasswordTextBox, lc);
 
-		lc.gridx = 0; lc.gridy = 2; lc.gridwidth = 2;
+		lc.gridx = 0;
+		lc.gridy = 2;
+		lc.gridwidth = 2;
 		loginButton = new JButton("Login");
 		loginButton.setName("loginButton");
 		loginButton.setEnabled(false);
 		loginButton.addActionListener(e -> {
 			loginErrorLabel.setText(" ");
-			userController.login(
-				loginEmailTextBox.getText().trim(),
-				new String(loginPasswordTextBox.getPassword())
-			);
+			userController.login(loginEmailTextBox.getText().trim(), new String(loginPasswordTextBox.getPassword()));
 		});
 		loginSection.add(loginButton, lc);
-		c.gridx = 0; c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 0;
 		panel.add(loginSection, c);
 
 		loginErrorLabel = new JLabel(" ");
 		loginErrorLabel.setName("loginErrorLabel");
 		loginErrorLabel.setForeground(Color.RED);
-		c.gridx = 0; c.gridy = 1;
+		c.gridx = 0;
+		c.gridy = 1;
 		panel.add(loginErrorLabel, c);
 
 		JButton switchToRegister = new JButton("Don't have an account? Register");
@@ -272,16 +279,15 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 			loginErrorLabel.setText(" ");
 			cardLayout.show(rootPanel, CARD_REGISTER);
 		});
-		c.gridx = 0; c.gridy = 2;
+		c.gridx = 0;
+		c.gridy = 2;
 		panel.add(switchToRegister, c);
 
 		KeyAdapter loginEnabler = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				loginButton.setEnabled(
-					!loginEmailTextBox.getText().trim().isEmpty() &&
-					loginPasswordTextBox.getPassword().length > 0
-				);
+						!loginEmailTextBox.getText().trim().isEmpty() && loginPasswordTextBox.getPassword().length > 0);
 			}
 		};
 		loginEmailTextBox.addKeyListener(loginEnabler);
@@ -305,56 +311,69 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		rc.fill = GridBagConstraints.HORIZONTAL;
 		rc.insets = new Insets(8, 6, 8, 6);
 
-		rc.gridx = 0; rc.gridy = 0; rc.weightx = 0;
+		rc.gridx = 0;
+		rc.gridy = 0;
+		rc.weightx = 0;
 		registerSection.add(new JLabel("First Name"), rc);
-		rc.gridx = 1; rc.weightx = 1.0;
+		rc.gridx = 1;
+		rc.weightx = 1.0;
 		registerFirstNameTextBox = new JTextField(20);
 		registerFirstNameTextBox.setName("registerFirstNameTextBox");
 		registerSection.add(registerFirstNameTextBox, rc);
 
-		rc.gridx = 0; rc.gridy = 1; rc.weightx = 0;
+		rc.gridx = 0;
+		rc.gridy = 1;
+		rc.weightx = 0;
 		registerSection.add(new JLabel("Last Name"), rc);
-		rc.gridx = 1; rc.weightx = 1.0;
+		rc.gridx = 1;
+		rc.weightx = 1.0;
 		registerLastNameTextBox = new JTextField(20);
 		registerLastNameTextBox.setName("registerLastNameTextBox");
 		registerSection.add(registerLastNameTextBox, rc);
 
-		rc.gridx = 0; rc.gridy = 2; rc.weightx = 0;
+		rc.gridx = 0;
+		rc.gridy = 2;
+		rc.weightx = 0;
 		registerSection.add(new JLabel("Email"), rc);
-		rc.gridx = 1; rc.weightx = 1.0;
+		rc.gridx = 1;
+		rc.weightx = 1.0;
 		registerEmailTextBox = new JTextField(20);
 		registerEmailTextBox.setName("registerEmailTextBox");
 		registerSection.add(registerEmailTextBox, rc);
 
-		rc.gridx = 0; rc.gridy = 3; rc.weightx = 0;
+		rc.gridx = 0;
+		rc.gridy = 3;
+		rc.weightx = 0;
 		registerSection.add(new JLabel("Password"), rc);
-		rc.gridx = 1; rc.weightx = 1.0;
+		rc.gridx = 1;
+		rc.weightx = 1.0;
 		registerPasswordTextBox = new JPasswordField(20);
 		registerPasswordTextBox.setName("registerPasswordTextBox");
 		registerSection.add(registerPasswordTextBox, rc);
 
-		rc.gridx = 0; rc.gridy = 4; rc.gridwidth = 2;
+		rc.gridx = 0;
+		rc.gridy = 4;
+		rc.gridwidth = 2;
 		registerButton = new JButton("Register");
 		registerButton.setName("registerButton");
 		registerButton.setEnabled(false);
 		registerButton.addActionListener(e -> {
 			registerErrorLabel.setText(" ");
-			userController.registerUser(
-				registerFirstNameTextBox.getText().trim(),
-				registerLastNameTextBox.getText().trim(),
-				registerEmailTextBox.getText().trim(),
-				new String(registerPasswordTextBox.getPassword())
-			);
+			userController.registerUser(registerFirstNameTextBox.getText().trim(),
+					registerLastNameTextBox.getText().trim(), registerEmailTextBox.getText().trim(),
+					new String(registerPasswordTextBox.getPassword()));
 		});
 		registerSection.add(registerButton, rc);
 
-		c.gridx = 0; c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 0;
 		panel.add(registerSection, c);
 
 		registerErrorLabel = new JLabel(" ");
 		registerErrorLabel.setName("registerErrorLabel");
 		registerErrorLabel.setForeground(Color.RED);
-		c.gridx = 0; c.gridy = 1;
+		c.gridx = 0;
+		c.gridy = 1;
 		panel.add(registerErrorLabel, c);
 
 		JButton switchToLogin = new JButton("Already have an account? Sign In");
@@ -365,18 +384,17 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 			registerErrorLabel.setText(" ");
 			cardLayout.show(rootPanel, CARD_LOGIN);
 		});
-		c.gridx = 0; c.gridy = 2;
+		c.gridx = 0;
+		c.gridy = 2;
 		panel.add(switchToLogin, c);
 
 		KeyAdapter registerEnabler = new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				registerButton.setEnabled(
-					!registerFirstNameTextBox.getText().trim().isEmpty() &&
-					!registerLastNameTextBox.getText().trim().isEmpty() &&
-					!registerEmailTextBox.getText().trim().isEmpty() &&
-					registerPasswordTextBox.getPassword().length > 0
-				);
+				registerButton.setEnabled(!registerFirstNameTextBox.getText().trim().isEmpty()
+						&& !registerLastNameTextBox.getText().trim().isEmpty()
+						&& !registerEmailTextBox.getText().trim().isEmpty()
+						&& registerPasswordTextBox.getPassword().length > 0);
 			}
 		};
 		registerFirstNameTextBox.addKeyListener(registerEnabler);
@@ -404,35 +422,50 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 		ic.fill = GridBagConstraints.HORIZONTAL;
 		ic.insets = new Insets(8, 6, 8, 6);
 
-		ic.gridx = 0; ic.gridy = 0; ic.weightx = 0;
+		ic.gridx = 0;
+		ic.gridy = 0;
+		ic.weightx = 0;
 		incidentSection.add(new JLabel("Title"), ic);
-		ic.gridx = 1; ic.weightx = 1.0;
+		ic.gridx = 1;
+		ic.weightx = 1.0;
 		incidentTitleTextBox = new JTextField(20);
 		incidentTitleTextBox.setName("incidentTitleTextBox");
 		incidentSection.add(incidentTitleTextBox, ic);
 
-		ic.gridx = 0; ic.gridy = 1; ic.weightx = 0;
+		ic.gridx = 0;
+		ic.gridy = 1;
+		ic.weightx = 0;
 		incidentSection.add(new JLabel("Description"), ic);
-		ic.gridx = 1; ic.weightx = 1.0;
+		ic.gridx = 1;
+		ic.weightx = 1.0;
 		incidentDescriptionTextBox = new JTextField(20);
 		incidentDescriptionTextBox.setName("incidentDescriptionTextBox");
 		incidentSection.add(incidentDescriptionTextBox, ic);
 
-		ic.gridx = 0; ic.gridy = 2; ic.weightx = 0;
+		ic.gridx = 0;
+		ic.gridy = 2;
+		ic.weightx = 0;
 		incidentSection.add(new JLabel("Severity"), ic);
-		ic.gridx = 1; ic.weightx = 1.0;
+		ic.gridx = 1;
+		ic.weightx = 1.0;
 		JComboBox<Severity> incidentSeverityComboBox = new JComboBox<>(Severity.values());
 		incidentSeverityComboBox.setName("incidentSeverityComboBox");
 		incidentSection.add(incidentSeverityComboBox, ic);
 
-		ic.gridx = 0; ic.gridy = 3; ic.weightx = 0;
+		ic.gridx = 0;
+		ic.gridy = 3;
+		ic.weightx = 0;
 		incidentSection.add(new JLabel("Tag"), ic);
-		ic.gridx = 1; ic.weightx = 1.0;
+		ic.gridx = 1;
+		ic.weightx = 1.0;
 		incidentTagTextField = new JTextField(20);
 		incidentTagTextField.setName("incidentTagTextField");
 		incidentSection.add(incidentTagTextField, ic);
 
-		ic.gridx = 0; ic.gridy = 4; ic.gridwidth = 2; ic.weightx = 1.0;
+		ic.gridx = 0;
+		ic.gridy = 4;
+		ic.gridwidth = 2;
+		ic.weightx = 1.0;
 		JButton submitIncidentButton = new JButton("Submit");
 		submitIncidentButton.setName("submitIncidentButton");
 		submitIncidentButton.addActionListener(e -> {
@@ -444,9 +477,8 @@ public class IncidentReportingSwingView extends JFrame implements IncidentReport
 			String title = incidentTitleTextBox.getText().trim();
 			String description = incidentDescriptionTextBox.getText().trim();
 			Severity severity = (Severity) incidentSeverityComboBox.getSelectedItem();
-			new Thread(() ->
-				incidentController.reportIncident(title, description, severity, tagTitle, loggedInUser)
-			).start();
+			new Thread(() -> incidentController.reportIncident(title, description, severity, tagTitle, loggedInUser))
+					.start();
 		});
 		incidentSection.add(submitIncidentButton, ic);
 

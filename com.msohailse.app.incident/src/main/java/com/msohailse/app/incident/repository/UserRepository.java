@@ -6,11 +6,11 @@ import com.msohailse.app.incident.model.User;
 
 public interface UserRepository {
 
-    void save(User user);
+	void save(User user);
 
-    User findById(int id);
+	User findById(int id);
 
-    User findByEmail(String email);
+	User findByEmail(String email);
 
-    List<User> findAll();
+	List<User> findAll();
 }

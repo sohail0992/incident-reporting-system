@@ -7,17 +7,26 @@ import java.util.List;
 
 public interface IncidentReportingRepository {
 	void save(User user);
+
 	User findUserByEmail(String email);
+
 	User findUserById(int id);
+
 	List<User> findAllUsers();
 
 	void save(Tag tag);
+
 	Tag findTagById(int id);
+
 	Tag findTagByTitle(String title);
+
 	List<Tag> findAllTags();
 
 	void save(Incident incident);
+
 	Incident findIncidentById(int id);
+
 	List<Incident> findAllIncidents();
+
 	List<Incident> findIncidentsByUser(User user);
 }

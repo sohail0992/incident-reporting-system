@@ -51,8 +51,7 @@ public class IncidentReportingSwingApp implements Callable<Void> {
 				properties.put("javax.persistence.jdbc.user", dbUser);
 				properties.put("javax.persistence.jdbc.password", dbPassword);
 
-				EntityManagerFactory emf =
-					Persistence.createEntityManagerFactory("incident_reporting", properties);
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("incident_reporting", properties);
 				JpaTransactionManager transactionManager = new JpaTransactionManager(emf);
 				IncidentReportingSwingView view = new IncidentReportingSwingView();
 				UserController userController = new UserController(transactionManager, view);
@@ -61,8 +60,7 @@ public class IncidentReportingSwingApp implements Callable<Void> {
 				view.setIncidentController(incidentController);
 				view.setVisible(true);
 			} catch (Exception e) {
-				Logger.getLogger(getClass().getName())
-					.log(Level.SEVERE, "Exception", e);
+				Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Exception", e);
 			}
 		});
 		return null;

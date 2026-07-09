@@ -32,7 +32,6 @@ public class IncidentPostgresRepository implements IncidentRepository {
 	@Override
 	public List<Incident> findByUser(User user) {
 		return em.createQuery("select i from Incident i where i.reportedBy = :user", Incident.class)
-				.setParameter("user", user)
-				.getResultList();
+				.setParameter("user", user).getResultList();
 	}
 }

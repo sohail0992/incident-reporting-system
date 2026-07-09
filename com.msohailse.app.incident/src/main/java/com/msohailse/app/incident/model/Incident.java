@@ -16,35 +16,35 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name="incidents")
+@Table(name = "incidents")
 public class Incident {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 
-	@Column(length=200, nullable=false)
+	@Column(length = 200, nullable = false)
 	private String title;
 
-	@Column(length=2000, nullable=true)
+	@Column(length = 2000, nullable = true)
 	private String description;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Severity severity;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private LocalDateTime reportedAt;
 
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private boolean isClosed;
 
 	@ManyToOne
-	@JoinColumn(name="user_id", nullable=false)
+	@JoinColumn(name = "user_id", nullable = false)
 	private User reportedBy;
 
 	@ManyToOne
-	@JoinColumn(name="tag_id", nullable=false)
+	@JoinColumn(name = "tag_id", nullable = false)
 	private Tag tag;
 
 	@Transient
@@ -97,7 +97,6 @@ public class Incident {
 		this.description = normalizer.trimAllSpaces(description);
 	}
 
-
 	public Severity getSeverity() {
 		return severity;
 	}
@@ -146,14 +145,12 @@ public class Incident {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("[").append(severity).append("] ").append(title)
-		  .append(" Description: ").append(description)
-		  .append(" Category: ").append(tag == null ? "null" : tag.getTagTitle())
-		  .append(" at ").append(reportedAt);
+		sb.append("[").append(severity).append("] ").append(title).append(" Description: ").append(description)
+				.append(" Category: ").append(tag == null ? "null" : tag.getTagTitle()).append(" at ")
+				.append(reportedAt);
 		return sb.toString();
 	}
 
-	
 	// helper methods
 
 	private String validateAndNormalize(String value) {

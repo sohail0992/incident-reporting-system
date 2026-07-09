@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface TagRepository {
 	void save(Tag tag);
+
 	Tag findById(int id);
+
 	List<Tag> findAll();
 }

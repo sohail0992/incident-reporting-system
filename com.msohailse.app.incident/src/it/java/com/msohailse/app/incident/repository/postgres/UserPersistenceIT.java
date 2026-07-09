@@ -32,7 +32,8 @@ public class UserPersistenceIT {
 
 	@AfterClass
 	public static void teardownDatabase() {
-		if (emf != null) emf.close();
+		if (emf != null)
+			emf.close();
 	}
 
 	@Before
@@ -46,7 +47,8 @@ public class UserPersistenceIT {
 
 	@After
 	public void cleanup() {
-		if (em != null && em.isOpen()) em.close();
+		if (em != null && em.isOpen())
+			em.close();
 	}
 
 	private void saveInTransaction(User user) {
@@ -154,7 +156,8 @@ public class UserPersistenceIT {
 		// verify via the same fresh EntityManager to avoid reading a stale
 		// first-level-cache copy from the original em
 		User retrieved = freshUserRepo.findById(savedId);
-		assertEquals("First name should be updated after merging a detached entity", "Franklin", retrieved.getFirstName());
+		assertEquals("First name should be updated after merging a detached entity", "Franklin",
+				retrieved.getFirstName());
 		freshEm.close();
 	}
 

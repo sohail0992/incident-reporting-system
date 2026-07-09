@@ -53,8 +53,7 @@ public class IncidentControllerTest {
 	public void setUp() {
 		closeable = MockitoAnnotations.openMocks(this);
 		when(transactionManager.doInTransaction(any()))
-			.thenAnswer(
-				answer((TransactionCode<?> code) -> code.apply(incidentReportingRepository)));
+				.thenAnswer(answer((TransactionCode<?> code) -> code.apply(incidentReportingRepository)));
 
 		loggedInUser = new User();
 		loggedInUser.setFirstName("John");

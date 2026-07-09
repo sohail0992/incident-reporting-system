@@ -17,7 +17,8 @@ public class IncidentController {
 		this.view = view;
 	}
 
-	public void reportIncident(String title, String description, Severity severity, String tagTitle, User loggedInUser) {
+	public void reportIncident(String title, String description, Severity severity, String tagTitle,
+			User loggedInUser) {
 		transactionManager.doInTransaction(repo -> {
 			Tag tag = repo.findTagByTitle(tagTitle);
 			if (tag == null) {

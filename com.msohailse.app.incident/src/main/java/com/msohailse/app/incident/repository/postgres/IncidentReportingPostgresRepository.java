@@ -19,18 +19,63 @@ public class IncidentReportingPostgresRepository implements IncidentReportingRep
 		this.incidentRepo = new IncidentPostgresRepository(em);
 	}
 
-	@Override public void save(User user)              { userRepo.save(user); }
-	@Override public User findUserByEmail(String email) { return userRepo.findByEmail(email); }
-	@Override public User findUserById(int id)          { return userRepo.findById(id); }
-	@Override public List<User> findAllUsers()          { return userRepo.findAll(); }
+	@Override
+	public void save(User user) {
+		userRepo.save(user);
+	}
 
-	@Override public void save(Tag tag)                    { tagRepo.save(tag); }
-	@Override public Tag findTagById(int id)               { return tagRepo.findById(id); }
-	@Override public Tag findTagByTitle(String title)      { return tagRepo.findByTitle(title); }
-	@Override public List<Tag> findAllTags()               { return tagRepo.findAll(); }
+	@Override
+	public User findUserByEmail(String email) {
+		return userRepo.findByEmail(email);
+	}
 
-	@Override public void save(Incident incident)              { incidentRepo.save(incident); }
-	@Override public Incident findIncidentById(int id)         { return incidentRepo.findById(id); }
-	@Override public List<Incident> findAllIncidents()         { return incidentRepo.findAll(); }
-	@Override public List<Incident> findIncidentsByUser(User u) { return incidentRepo.findByUser(u); }
+	@Override
+	public User findUserById(int id) {
+		return userRepo.findById(id);
+	}
+
+	@Override
+	public List<User> findAllUsers() {
+		return userRepo.findAll();
+	}
+
+	@Override
+	public void save(Tag tag) {
+		tagRepo.save(tag);
+	}
+
+	@Override
+	public Tag findTagById(int id) {
+		return tagRepo.findById(id);
+	}
+
+	@Override
+	public Tag findTagByTitle(String title) {
+		return tagRepo.findByTitle(title);
+	}
+
+	@Override
+	public List<Tag> findAllTags() {
+		return tagRepo.findAll();
+	}
+
+	@Override
+	public void save(Incident incident) {
+		incidentRepo.save(incident);
+	}
+
+	@Override
+	public Incident findIncidentById(int id) {
+		return incidentRepo.findById(id);
+	}
+
+	@Override
+	public List<Incident> findAllIncidents() {
+		return incidentRepo.findAll();
+	}
+
+	@Override
+	public List<Incident> findIncidentsByUser(User u) {
+		return incidentRepo.findByUser(u);
+	}
 }

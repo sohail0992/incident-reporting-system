@@ -28,7 +28,8 @@
 		<sonar.issue.ignore.multicriteria.e1.ruleKey>java:S2699</sonar.issue.ignore.multicriteria.e1.ruleKey>
 		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/*SwingViewTest.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
 
-		<!-- Disable "Rename class to match test naming regex": SonarCloud's default
+		<!-- Disable "Rename class to match test naming regex": SonarCloud's
+		default
 		regex doesn't know the *E2E.java suffix, which is required by our Failsafe
 		config and matches the book's own E2E naming convention (SchoolSwingAppE2E) -->
 		<sonar.issue.ignore.multicriteria.e2.ruleKey>java:S3577</sonar.issue.ignore.multicriteria.e2.ruleKey>
@@ -108,7 +109,8 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Picocli: command line argument parsing for the Swing app entry point,
+		<!-- Picocli: command line argument parsing for the Swing app entry
+		point,
 		so e2e tests can launch it pointing at a Testcontainers database -->
 		<dependency>
 			<groupId>info.picocli</groupId>
@@ -191,8 +193,10 @@
 					<configuration>
 						<repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
 						<jacocoReports>
-							<jacocoReport>${project.build.directory}/site/jacoco/jacoco.xml</jacocoReport>
-							<jacocoReport>${project.build.directory}/site/jacoco-it/jacoco.xml</jacocoReport>
+							<jacocoReport>
+								${project.build.directory}/site/jacoco/jacoco.xml</jacocoReport>
+							<jacocoReport>
+								${project.build.directory}/site/jacoco-it/jacoco.xml</jacocoReport>
 						</jacocoReports>
 					</configuration>
 				</plugin>

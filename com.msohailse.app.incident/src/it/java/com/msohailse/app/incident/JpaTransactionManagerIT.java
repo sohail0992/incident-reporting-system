@@ -36,7 +36,8 @@ public class JpaTransactionManagerIT {
 
 	@AfterClass
 	public static void teardownDatabase() {
-		if (emf != null) emf.close();
+		if (emf != null)
+			emf.close();
 	}
 
 	@Before
@@ -52,7 +53,8 @@ public class JpaTransactionManagerIT {
 
 	@After
 	public void cleanup() {
-		if (em != null && em.isOpen()) em.close();
+		if (em != null && em.isOpen())
+			em.close();
 	}
 
 	private User buildUser(String email) {
@@ -79,8 +81,7 @@ public class JpaTransactionManagerIT {
 			return null;
 		});
 
-		assertEquals("User should be committed to the database",
-				1, new UserPostgresRepository(em).findAll().size());
+		assertEquals("User should be committed to the database", 1, new UserPostgresRepository(em).findAll().size());
 	}
 
 	@Test
@@ -90,8 +91,7 @@ public class JpaTransactionManagerIT {
 			return null;
 		});
 
-		User found = transactionManager.doInTransaction(
-				repo -> repo.findUserByEmail("john@example.com"));
+		User found = transactionManager.doInTransaction(repo -> repo.findUserByEmail("john@example.com"));
 
 		assertNotNull("The result of the code should be returned", found);
 		assertEquals("john@example.com", found.getEmail());
@@ -99,16 +99,13 @@ public class JpaTransactionManagerIT {
 
 	@Test
 	public void testDoInTransactionRollsBackWhenCodeThrows() {
-		assertThatThrownBy(() ->
-			transactionManager.doInTransaction(repo -> {
-				repo.save(buildUser("john@example.com"));
-				throw new RuntimeException("failure inside the transaction");
-			}))
-			.isInstanceOf(RuntimeException.class)
-			.hasMessage("failure inside the transaction");
+		assertThatThrownBy(() -> transactionManager.doInTransaction(repo -> {
+			repo.save(buildUser("john@example.com"));
+			throw new RuntimeException("failure inside the transaction");
+		})).isInstanceOf(RuntimeException.class).hasMessage("failure inside the transaction");
 
-		assertEquals("Nothing should be committed after a rollback",
-				0, new UserPostgresRepository(em).findAll().size());
+		assertEquals("Nothing should be committed after a rollback", 0,
+				new UserPostgresRepository(em).findAll().size());
 	}
 
 	@Test
@@ -118,15 +115,13 @@ public class JpaTransactionManagerIT {
 			return null;
 		});
 
-		assertThatThrownBy(() ->
-			transactionManager.doInTransaction(repo -> {
-				repo.save(buildUser("duplicate@example.com"));
-				return null;
-			}))
-			.isInstanceOf(RuntimeException.class);
+		assertThatThrownBy(() -> transactionManager.doInTransaction(repo -> {
+			repo.save(buildUser("duplicate@example.com"));
+			return null;
+		})).isInstanceOf(RuntimeException.class);
 
-		assertEquals("Only the first user should be in the database",
-				1, new UserPostgresRepository(em).findAll().size());
+		assertEquals("Only the first user should be in the database", 1,
+				new UserPostgresRepository(em).findAll().size());
 	}
 
 	@Test
@@ -213,8 +208,7 @@ public class JpaTransactionManagerIT {
 			return incident;
 		});
 
-		Incident byId = transactionManager.doInTransaction(
-				repo -> repo.findIncidentById(saved.getId()));
+		Incident byId = transactionManager.doInTransaction(repo -> repo.findIncidentById(saved.getId()));
 		assertNotNull(byId);
 		assertEquals("Water pipe burst", byId.getTitle());
 

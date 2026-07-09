@@ -25,8 +25,7 @@ public class TagPostgresRepository implements TagRepository {
 
 	public Tag findByTitle(String title) {
 		List<Tag> results = em.createQuery("select t from Tag t where t.tagTitle = :title", Tag.class)
-				.setParameter("title", title)
-				.getResultList();
+				.setParameter("title", title).getResultList();
 		return results.isEmpty() ? null : results.get(0);
 	}
 
